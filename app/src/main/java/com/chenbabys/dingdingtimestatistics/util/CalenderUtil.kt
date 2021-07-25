@@ -1,6 +1,7 @@
-package com.chenbabys.dingdingtimestatistics
+package com.chenbabys.dingdingtimestatistics.util
 
 import android.annotation.SuppressLint
+import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,17 +9,17 @@ import java.util.*
  * 获取相应返回的日期
  */
 object CalenderUtil {
+    private val calendar = Calendar.getInstance()
 
     /**
      * 获取日历
      */
     fun getDateEntities():MutableList<DateEntity>{
         val dateEntities: MutableList<DateEntity> = mutableListOf()
-        val calendar = Calendar.getInstance()
         //日期格式化
         //日期格式化
-        @SuppressLint("SimpleDateFormat") val formatMonthDay = SimpleDateFormat("MM-dd")
-        @SuppressLint("SimpleDateFormat") val formatYear = SimpleDateFormat("yyyy")
+//        @SuppressLint("SimpleDateFormat") val formatMonthDay = SimpleDateFormat("MM-dd")
+//        @SuppressLint("SimpleDateFormat") val formatYear = SimpleDateFormat("yyyy")
         //calendar.set(Calendar.MONTH,6)//不设置月份就是默认当前月份
         val monthLength = calendar.getMaximum(Calendar.DAY_OF_MONTH)
 
@@ -34,5 +35,13 @@ object CalenderUtil {
         }
         return dateEntities
     }
+
+    /**
+     * 获取本月(+1，因为月份是从0开始)
+     */
+    fun getThisMonth():String{
+        return (calendar.get(Calendar.MONTH) +1 ).toString()
+    }
+
 
 }

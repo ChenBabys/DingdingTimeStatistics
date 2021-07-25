@@ -1,9 +1,10 @@
-package com.chenbabys.dingdingtimestatistics
+package com.chenbabys.dingdingtimestatistics.ui.main
 
 import android.annotation.SuppressLint
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chenbabys.dingdingtimestatistics.R
 
 class MainListAdapter: BaseQuickAdapter<DateEntity,BaseViewHolder>(R.layout.item_main_list_view) {
 

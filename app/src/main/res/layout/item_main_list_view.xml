@@ -50,7 +50,7 @@
         android:id="@+id/tv_count"
         android:layout_width="0dp"
         android:layout_weight="2"
-        android:hint="自动生成"
+        android:hint="autoCount"
         android:textSize="15sp"
         android:textColor="@color/red"
         android:gravity="center_horizontal"

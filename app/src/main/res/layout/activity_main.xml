@@ -8,9 +8,34 @@
     android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
+    <include app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/header_title"
+        layout="@layout/item_main_list_head_view"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        app:layout_constraintTop_toBottomOf="@id/header_title"
+        app:layout_constraintBottom_toTopOf="@id/tv_count_total"
+        android:layout_height="0dp"/>
+
+    <View
+        android:id="@+id/line1"
+        app:layout_constraintTop_toBottomOf="@id/rv_content"
+        android:layout_width="match_parent"
+        android:background="@color/purple_500"
+        android:layout_height="0.5dp"/>
+
+    <TextView
+        android:id="@+id/tv_count_total"
+        app:layout_constraintTop_toBottomOf="@id/line1"
+        android:layout_width="match_parent"
+        android:padding="@dimen/dp_10"
+        android:text="本月打卡统计时间为：256小时40分钟"
+        android:gravity="center"
+        android:textColor="@color/purple_500"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="100dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

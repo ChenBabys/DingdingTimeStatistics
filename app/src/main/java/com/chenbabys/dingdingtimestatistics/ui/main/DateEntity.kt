@@ -1,4 +1,4 @@
-package com.chenbabys.dingdingtimestatistics
+package com.chenbabys.dingdingtimestatistics.ui.main
 
 import java.text.SimpleDateFormat
 import java.util.*
