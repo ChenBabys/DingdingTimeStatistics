@@ -1,8 +1,7 @@
 package com.chenbabys.dingdingtimestatistics.util
 
-import android.annotation.SuppressLint
-import com.blankj.utilcode.util.LogUtils
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
+import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -15,7 +14,7 @@ object CalenderUtil {
     /**
      * 获取日历
      */
-    fun getDateEntities():MutableList<DateEntity>{
+    fun getDateEntities(): MutableList<DateEntity> {
         val dateEntities: MutableList<DateEntity> = mutableListOf()
         //日期格式化
         //日期格式化
@@ -45,12 +44,11 @@ object CalenderUtil {
         //---------- 第一种结束----------//
 
 
-
         //--------- 第二种做法------------//
-        for (index in 1..monthLength){
-            calendar.set(Calendar.DAY_OF_MONTH,index)
+        for (index in 1..monthLength) {
+            calendar.set(Calendar.DAY_OF_MONTH, index)
             val thisDate = calendar.time
-            val thisDayOfWeek  = calendar.get(Calendar.DAY_OF_WEEK)-1//星期也是从0开始的，所以这样
+            val thisDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1//星期也是从0开始的，所以这样
             val entity = DateEntity().apply {
                 date = thisDate
                 dayOfWeek = thisDayOfWeek
@@ -60,7 +58,6 @@ object CalenderUtil {
         //---------- 第二种结束----------//
 
 
-
         //返回结果
         return dateEntities
     }
@@ -68,9 +65,25 @@ object CalenderUtil {
     /**
      * 获取本月月份(+1，因为月份是从0开始)
      */
-    fun getThisMonth():String{
-        return (calendar.get(Calendar.MONTH) +1 ).toString()
+    fun getThisMonth(): String {
+        return (calendar.get(Calendar.MONTH) + 1).toString()
     }
 
+    /**
+     * 求差值时间
+     * 值得格式必须是HH:mm:ss
+     */
+    fun getDifferenceTime(startTime: String, endTime: String): Long {
+        val format = SimpleDateFormat("HH:mm:ss")
+        val startDate = format.parse("$startTime:00")//获取开始时间date
+        val endDate = format.parse("$endTime:00")//获取结束时间date
+        val startLong = startDate.time//获取开始时间毫秒
+        val endLong = endDate.time//获取结束时间毫秒
 
+        val middleLong = endLong - startLong//获取差值毫秒
+        //val 相隔天数: Long = (timeNow - timeOld) / (1000 * 60 * 60 * 24) //化为天
+
+        val h = middleLong / (1000 * 60 * 24) //转换为小时
+        return h
+    }
 }

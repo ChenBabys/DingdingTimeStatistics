@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/line1"
         android:layout_width="match_parent"
         android:padding="@dimen/dp_10"
-        android:text="本月打卡统计时间为：256小时40分钟"
+        android:text="本月打卡统计时间为：0.0小时"
         android:gravity="center"
         android:textColor="@color/purple_500"
         android:textSize="20sp"

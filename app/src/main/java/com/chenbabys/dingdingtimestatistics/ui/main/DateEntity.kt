@@ -7,7 +7,8 @@ data class DateEntity(   var date: Date? = null,//具体日期
                          var day: String? = null,//一个月的某天
                          var monthStr: String? = null,//月份
                          var dayOfWeek: Int? = null,//星期几
-                         var isToday:Boolean = false //是否是时间上的今天
+                         var isToday:Boolean = false, //是否是时间上的今天
+                         var dayWorkHour:Long?=null
 ){
    val monthAndDayFormat =  SimpleDateFormat("MM-dd")
 
