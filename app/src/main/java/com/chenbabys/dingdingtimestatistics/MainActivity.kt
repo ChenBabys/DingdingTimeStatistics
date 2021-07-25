@@ -1,5 +1,6 @@
 package com.chenbabys.dingdingtimestatistics
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.LogUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
@@ -19,6 +20,7 @@ class MainActivity : BaseActivity<BaseViewModel,ActivityMainBinding>() {
             rvContent.adapter = adapter
         }
         val dateList = CalenderUtil.getDateEntities()
+
         //adapter.addHeaderView(ItemMainListHeadViewBinding.inflate(layoutInflater).root)，不在使用
         adapter.setList(dateList)
     }
