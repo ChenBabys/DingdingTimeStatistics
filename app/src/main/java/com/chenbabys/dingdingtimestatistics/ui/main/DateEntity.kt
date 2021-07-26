@@ -15,7 +15,6 @@ data class DateEntity(
     var endTime: String? = null,//下班时间
 
 ) {
-    private val monthAndDayFormat = SimpleDateFormat("MM-dd")
 
     /**
      * 获取星期的格式化
@@ -45,6 +44,7 @@ data class DateEntity(
      * 格式化成mm:dd日期
      */
     fun getFotMatMonthDay(myDate: Date): String {
+        val monthAndDayFormat = SimpleDateFormat("MM-dd")
         return monthAndDayFormat.format(myDate)
     }
 }

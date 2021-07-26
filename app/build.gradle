@@ -98,4 +98,8 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     //腾讯mmkv
     implementation 'com.tencent:mmkv-static:1.2.6'
+    //年月日选择器
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+    //弹窗控件
+    implementation 'com.github.goweii:AnyLayer:4.1.4-androidx'
 }

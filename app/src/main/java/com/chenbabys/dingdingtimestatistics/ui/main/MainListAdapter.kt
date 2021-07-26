@@ -1,19 +1,20 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chenbabys.dingdingtimestatistics.R
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
+import com.chenbabys.dingdingtimestatistics.util.DialogUtils
 
 /**
  * 日历打卡表适配器
  */
-class MainListAdapter(private val onTextChangeListener: () -> Unit) :
+class MainListAdapter(
+    private val onTextViewClickListener: (textView: TextView, item: DateEntity, position: Int, isStartTime: Boolean) -> Unit,
+    private val onTextRemoveListener: () -> Unit
+) :
     BaseQuickAdapter<DateEntity, BaseViewHolder>(R.layout.item_main_list_view) {
 
     override fun convert(holder: BaseViewHolder, item: DateEntity) {
@@ -26,39 +27,48 @@ class MainListAdapter(private val onTextChangeListener: () -> Unit) :
                 date.setTextColor(ContextCompat.getColor(context, R.color.purple_500))
             }
         }
-        val startTime = holder.getView<EditText>(R.id.tv_start_time)
-        val endTime = holder.getView<EditText>(R.id.tv_end_time)
+        val startTime = holder.getView<TextView>(R.id.tv_start_time)
+        val endTime = holder.getView<TextView>(R.id.tv_end_time)
         val countTime = holder.getView<TextView>(R.id.tv_count)
-        startTime.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {   // 按下完成按钮，这里和上面imeOptions对应
-                    item.startTime = startTime.text.toString()
-                    onTextChangeListener.invoke()
-                    return false   //返回true，保留软键盘。false，隐藏软键盘
-                }
-                return false
-            }
-        })
-        endTime.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {   // 按下完成按钮，这里和上面imeOptions对应
-                    item.startTime = startTime.text.toString()
-                    item.endTime = endTime.text.toString()
-                    onTextChangeListener.invoke()
-                    return false   //返回true，保留软键盘。false，隐藏软键盘
-                }
-                return false
-            }
-        })
+        startTime.setOnClickListener {
+            onTextViewClickListener.invoke(startTime, item, holder.adapterPosition, true)
+        }
+        startTime.setOnLongClickListener {
+            DialogUtils.showConfirmDialog(
+                "操作删除",
+                "清除${date.text},上班时间：${startTime.text}项？",
+                listener = { dialog, which ->
+                    startTime.text = ""
+                    item.startTime = null
+                    onTextRemoveListener.invoke()
+                })
+            true
+        }
+
+        endTime.setOnClickListener {
+            onTextViewClickListener.invoke(startTime, item, holder.adapterPosition, false)
+        }
+        endTime.setOnLongClickListener {
+            DialogUtils.showConfirmDialog(
+                "操作删除",
+                "清除${date.text},下班时间：${endTime.text}项？",
+                listener = { dialog, which ->
+                    endTime.text = ""
+                    item.endTime = null
+                    onTextRemoveListener.invoke()
+                })
+            true
+        }
+
         if (item.startTime.isNullOrEmpty()) {
             when (item.isWeekEnd()) {
-                true -> startTime.setText("")
-                false -> startTime.setText("9:00")//空的时候把上班时间设置为默认值
+                true -> startTime.text = ""
+                false -> startTime.text = "9:00"//空的时候把上班时间设置为默认值
             }
         } else {
-            startTime.setText(item.startTime)//空的时候把上班时间设置为默认值
+            startTime.text = item.startTime//空的时候把上班时间设置为默认值
         }
-        endTime.setText(item.endTime)//下班时间
+        endTime.text = item.endTime//下班时间
         if (!item.startTime.isNullOrEmpty() && !item.endTime.isNullOrEmpty()) {
             val hour =
                 CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString())
