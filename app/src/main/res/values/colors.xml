@@ -8,7 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#F5FF8D</color>
-    <color name="gay">#AEAEAE</color>
+    <color name="gray">#AEAEAE</color>
     <color name="red">#FF0000</color>
     <color name="qing">#06F3A7</color>
+    <color name="lite_pink">#FF80AB</color>
+    <color name="orange">#FF6D00</color>
+    <color name="yellow_deep">#FFD600</color>
 </resources>

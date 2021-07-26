@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 /**
  * 基类viewModel
  */
-class BaseViewModel:ViewModel() , LifecycleObserver {
+open class BaseViewModel:ViewModel() , LifecycleObserver {
     var loadingMessage = MutableLiveData<LoadingMessage>()//是否显示loading
     var errorData = MutableLiveData<ErrorResult>()//错误信息
     private fun showError(error: ErrorResult) {

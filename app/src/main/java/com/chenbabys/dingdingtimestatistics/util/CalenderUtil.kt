@@ -71,19 +71,31 @@ object CalenderUtil {
 
     /**
      * 求差值时间
-     * 值得格式必须是HH:mm:ss
+     * 值得格式必须是HH:mm或者HH.mm
      */
-    fun getDifferenceTime(startTime: String, endTime: String): Long {
+    fun getDifferenceTime(startTime: String, endTime: String): Float {
+        val startStr = if (startTime.contains(".")) startTime.replace(".", ":") else startTime
+        val endStr = if (endTime.contains(".")) endTime.replace(".", ":") else endTime
         val format = SimpleDateFormat("HH:mm:ss")
-        val startDate = format.parse("$startTime:00")//获取开始时间date
-        val endDate = format.parse("$endTime:00")//获取结束时间date
+        val startDate = format.parse("$startStr:00")//获取开始时间date
+        val endDate = format.parse("$endStr:00")//获取结束时间date
         val startLong = startDate.time//获取开始时间毫秒
         val endLong = endDate.time//获取结束时间毫秒
 
         val middleLong = endLong - startLong//获取差值毫秒
         //val 相隔天数: Long = (timeNow - timeOld) / (1000 * 60 * 60 * 24) //化为天
-
-        val h = middleLong / (1000 * 60 * 24) //转换为小时
+        //h:小时，s:秒，ms:毫秒
+        //1h=3600s=3600*1000=3600000ms
+        val h = middleLong / (1000 * 60 * 60).toFloat() //毫秒转换为小时，记得返回float类型数据。
         return h
     }
+
+    /**
+     * 获取当前是否在月里的一号
+     */
+    fun getCalenderInOne(): Boolean {
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        return day == 1
+    }
+
 }

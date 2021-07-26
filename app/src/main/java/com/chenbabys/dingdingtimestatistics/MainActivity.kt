@@ -1,20 +1,25 @@
 package com.chenbabys.dingdingtimestatistics
 
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.SpanUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
 import com.chenbabys.dingdingtimestatistics.ui.main.MainListAdapter
+import com.chenbabys.dingdingtimestatistics.ui.viewmodel.MainVM
+import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 
 /**
- *
+ *主页
  */
-class MainActivity : BaseActivity<BaseViewModel, ActivityMainBinding>() {
+class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     private val adapter by lazy {
         MainListAdapter {
-            totalCount()
+            viewModel.dateListChange.value = true
         }
     }
 
@@ -24,24 +29,35 @@ class MainActivity : BaseActivity<BaseViewModel, ActivityMainBinding>() {
             rvContent.layoutManager = LinearLayoutManager(mContext)
             rvContent.adapter = adapter
         }
-        val dateList = CalenderUtil.getDateEntities()
-        adapter.setList(dateList)
+        //获取日历数据
+        viewModel.getCalendarEntities()
     }
 
     override fun initVm() {
-
+        viewModel.dateListChange.observe(this, Observer {
+            adapter.setList(viewModel.dateList)
+            totalCount()//统计
+        })
     }
 
     /**
      * 做时间统计
      */
     private fun totalCount() {
-        var totalHour: Long = 0
-        adapter.data.forEach {
+        var totalHour: Float = 0.0f
+        viewModel.dateList.forEach {
             it.dayWorkHour?.let { hour ->
                 totalHour += hour
             }
         }
-        binding.tvCountTotal.text = "本月打卡统计时间为：${totalHour}小时"
+        SpanUtils.with(binding.tvCountTotal)
+            .append("(输入后回车键统计)")
+            .setForegroundColor(ContextCompat.getColor(mContext, R.color.qing))
+            .appendLine()
+            .append("本月打卡统计时间为：${totalHour}小时").create()
+        //统计完之后保存到本地cache
+        LogUtils.d("实体",viewModel.dateList.toString())
+
+        CacheUtil.setDdtsCache(viewModel.dateList)
     }
 }
