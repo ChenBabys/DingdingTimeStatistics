@@ -44,6 +44,7 @@ class MainListAdapter(
                 listener = { dialog, which ->
                     startTime.text = ""
                     item.startTime = null
+                    item.vacation =null
                     onTextRemoveListener.invoke()
                 })
             true
@@ -59,6 +60,7 @@ class MainListAdapter(
                 listener = { dialog, which ->
                     endTime.text = ""
                     item.endTime = null
+                    item.vacation =null
                     onTextRemoveListener.invoke()
                 })
             true
