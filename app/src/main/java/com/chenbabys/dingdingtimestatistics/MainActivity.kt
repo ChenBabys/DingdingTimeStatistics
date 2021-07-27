@@ -2,7 +2,6 @@ package com.chenbabys.dingdingtimestatistics
 
 import android.annotation.SuppressLint
 import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,13 +10,13 @@ import com.bigkoo.pickerview.view.TimePickerView
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
-import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
 import com.chenbabys.dingdingtimestatistics.ui.main.MainListAdapter
 import com.chenbabys.dingdingtimestatistics.ui.viewmodel.MainVM
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
+import com.chenbabys.dingdingtimestatistics.util.DialogUtils
 import java.text.SimpleDateFormat
 
 /**
@@ -26,8 +25,18 @@ import java.text.SimpleDateFormat
 class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     private val adapter by lazy {
         //textView当前点击的textview,item,当前项的相关数据和字段，position当前下标，isStartTime当前是否是选择的是添加上班时间
-        MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime ->
-            showTimePicker(item, isStartTime)
+        //isModifyTotal:是否是修改工时
+        MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
+            if (isModifyTotal) {//是添加请假的操作
+                DialogUtils.showMoreDialog(mutableListOf("请假了"), textView, listener = {
+                    DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
+                        item.vacation = it
+                        viewModel.dateListChange.value = true
+                    })
+                }, -62f, -15f)
+            } else {//普通的其他操作
+                showTimePicker(item, isStartTime, position)
+            }
         }, onTextRemoveListener = {
             viewModel.dateListChange.value = true
         })
@@ -46,8 +55,11 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     override fun initVm() {
         viewModel.dateListChange.observe(this, Observer {
             adapter.setList(viewModel.dateList)
-            totalCount()//统计
         })
+        //所有视图可见时调用(必须在视图可见完成后或者用延时去统计，否则出现统计不准确不完全的问题~)
+        adapter.recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
+            totalCount()//统计
+        }
     }
 
     /**
@@ -72,24 +84,29 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     private var pvTime: TimePickerView? = null
 
     @SuppressLint("SimpleDateFormat")
-    private val formatTime = SimpleDateFormat("HH.mm.ss")
+    private val formatTime = SimpleDateFormat("HH:mm")
 
     /**
      * 显示时间选择器
      * https://github.com/Bigkoo/Android-PickerView
+     * item：适配器中正在点击操作的项的相关字段和数据
+     * isStartTime：是否是开始（上班）时间
+     * position：正在操作的下标
+     * isModifyTotal:是否是在修改工时统计项
      */
-    private fun showTimePicker(item: DateEntity, isStartTime: Boolean) {
+    private fun showTimePicker(item: DateEntity, isStartTime: Boolean, position: Int) {
         pvTime = TimePickerBuilder(mContext) { date, v ->
             when (isStartTime) {
                 true -> {//HH:mm:ss,h大写代表是24小时制，小写反之
-                    item.startTime = formatTime.format(date)
+                    item.startTime = formatTime.format(date)//方法一
+                    //viewModel.dateList[position].startTime = formatTime.format(date)//方法二
                 }
                 false -> {
-                    item.endTime = formatTime.format(date)
+                    item.endTime = formatTime.format(date)//方法一
+                    //viewModel.dateList[position].endTime = formatTime.format(date)//方法二
                 }
             }
             viewModel.dateListChange.value = true
-
         }.setLayoutRes(R.layout.pickview_costom_time) { view ->
             val tvCancel = view?.findViewById<Button>(R.id.btnCancel)
             val tvSubmit = view?.findViewById<Button>(R.id.btnSubmit)
@@ -100,13 +117,19 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
             tvCancel?.setOnClickListener {
                 pvTime?.dismiss()
             }
-        }.setType(booleanArrayOf(false, false, false, true, true, true)) // 默认全部显示
-            .setContentTextSize(18).setLabel("年", "月", "日", "时", "分", "秒")
+        }.setType(booleanArrayOf(false, false, false, true, true, false)) // 默认全部显示
+            .setContentTextSize(18)
+            .setLabel("年", "月", "日", "时", "分", "秒")
             .setLineSpacingMultiplier(1.2f)
             .setTextXOffset(0, 0, 0, 40, 0, -40)
             .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
             .setDividerColor(ContextCompat.getColor(mContext, R.color.gray)).build()
         pvTime?.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        pvTime = null
     }
 
 }

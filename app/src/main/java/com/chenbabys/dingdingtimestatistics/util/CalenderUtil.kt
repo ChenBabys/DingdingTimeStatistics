@@ -1,7 +1,9 @@
 package com.chenbabys.dingdingtimestatistics.util
 
+import android.annotation.SuppressLint
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.TimeUtils
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
-import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,5 +99,23 @@ object CalenderUtil {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         return day == 1
     }
+
+    /**
+     * 字符时间变成Float按照小时返回
+     * 时间戳不知为何是负数，排查后确定time是拿到了1970年的时间戳，所以负数。暂时不知怎么解决~取消这种做法了
+     */
+    fun getTimeStr2MillLong(time: String): Float {
+        LogUtils.d("查看", time)
+        val timeStr = if (time.contains(".")) time.replace(".", ":") else time
+        val format = SimpleDateFormat("HH:mm:ss")
+        val currentDate = format.parse("${timeStr}:00")//获取开始时间date
+        val dateLong = currentDate.time
+        val hour = dateLong / (1000 * 60 * 60)//转换成小时
+        LogUtils.d("查看", TimeUtils.millis2String(hour))
+        LogUtils.d("查看", dateLong)
+        LogUtils.d("查看", hour)
+        return hour.toFloat()
+    }
+
 
 }
