@@ -141,7 +141,7 @@ object DialogUtils {
         onShowOrHideListener: ((isShow: Boolean) -> Unit)? = null//可空
     ): DialogLayer {
         val contentView = LayoutInflater.from(ActivityHolder.requireCurrentActivity())
-            .inflate(R.layout.dialog_purchase_good_number_input, null)
+            .inflate(R.layout.dialog_vacation_hours_input, null)
         val inputBox = contentView.findViewById<EditText>(R.id.et_number)
         val tvComfirm = contentView.findViewById<LinearLayoutCompat>(R.id.fl_settlement)
         val dialog =

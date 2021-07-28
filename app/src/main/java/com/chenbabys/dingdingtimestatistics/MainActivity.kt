@@ -1,6 +1,8 @@
 package com.chenbabys.dingdingtimestatistics
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import androidx.core.content.ContextCompat
@@ -8,8 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.SpanUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
@@ -19,6 +19,7 @@ import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  *主页
@@ -29,12 +30,15 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         //isModifyTotal:是否是修改工时
         MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
             if (isModifyTotal) {//是添加请假的操作
-                DialogUtils.showMoreDialog(mutableListOf("请假了"), textView, listener = {
-                    DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
-                        item.vacation = it
-                        viewModel.dateListChange.value = true
-                    })
-                }, -62f, -15f)
+                DialogUtils.showMoreDialog(
+                    mutableListOf(if (item.vacation != null) "修改请假时间" else "添加请假时间"),
+                    textView, listener = {
+                        DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
+                            item.vacation = it
+                            viewModel.dateListChange.value = true
+                        })
+                    }, -40f, -15f
+                )
             } else {//普通的其他操作
                 showTimePicker(item, isStartTime, position)
             }
@@ -56,6 +60,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     override fun initVm() {
         viewModel.dateListChange.observe(this, Observer {
             adapter.setList(viewModel.dateList)
+            Handler(Looper.getMainLooper()).postDelayed({ scroll2TodayPos() }, 100)
         })
         //所有视图可见时调用(必须在视图可见完成后或者用延时去统计，否则出现统计不准确不完全的问题~)
         adapter.recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
@@ -70,6 +75,17 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 binding.tvLastMonthCountTotal.text = ("上月总工时：${CacheUtil.getLastMonthHours()}小时")
             }
         })
+    }
+
+    /**
+     * 跳转到“今天”的下标
+     */
+    private fun scroll2TodayPos() {
+        adapter.data.forEach { data -> //遍历查找当前日期所在的下标,而后跳转到指定下标
+            data.isTodayPosition?.let { pos ->
+                binding.rvContent.smoothScrollToPosition(pos)
+            }
+        }
     }
 
     /**
@@ -103,6 +119,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
      * isModifyTotal:是否是在修改工时统计项
      */
     private fun showTimePicker(item: DateEntity, isStartTime: Boolean, position: Int) {
+        val lastChooseCalendar = viewModel.getLastTimeChooseTime(item, isStartTime)
         pvTime = TimePickerBuilder(mContext) { date, v ->
             when (isStartTime) {
                 true -> {//HH:mm:ss,h大写代表是24小时制，小写反之
@@ -127,6 +144,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
             }
         }.setType(booleanArrayOf(false, false, false, true, true, false)) // 默认全部显示
             .setContentTextSize(18)
+            .setDate(lastChooseCalendar)//设置上次时间
             .setLabel("年", "月", "日", "时", "分", "秒")
             .setLineSpacingMultiplier(1.2f)
             .setTextXOffset(0, 0, 0, 40, 0, -40)
@@ -135,6 +153,10 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         pvTime?.show()
     }
 
+
+    /**
+     * 活动销毁
+     */
     override fun onDestroy() {
         super.onDestroy()
         pvTime = null

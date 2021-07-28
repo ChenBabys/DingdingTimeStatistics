@@ -6,6 +6,7 @@ import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
+import java.util.*
 
 /**
  * Created by ChenYesheng On 2021/7/26 16:02
@@ -37,5 +38,25 @@ class MainVM : BaseViewModel() {
         }
         dateListChange.value = true
     }
+
+    /**
+     * 获取上次选择的日期
+     */
+    fun getLastTimeChooseTime(item: DateEntity, isStartTime: Boolean): Calendar {
+        val lastCalendar = Calendar.getInstance()
+        (if (isStartTime) item.startTime else item.endTime)?.let {
+            if (it.contains(".")) {
+                val startTimeList = it.split(".")
+                lastCalendar.set(Calendar.HOUR_OF_DAY, startTimeList[0].toInt())
+                lastCalendar.set(Calendar.MINUTE, startTimeList[1].toInt())
+            } else if (it.contains(":")) {
+                val startTimeList = it.split(":")
+                lastCalendar.set(Calendar.HOUR_OF_DAY, startTimeList[0].toInt())
+                lastCalendar.set(Calendar.MINUTE, startTimeList[1].toInt())
+            }
+        }
+        return lastCalendar
+    }
+
 
 }

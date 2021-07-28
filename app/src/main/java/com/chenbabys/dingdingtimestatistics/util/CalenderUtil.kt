@@ -80,6 +80,12 @@ object CalenderUtil {
         return currentDay == currentMonthLength//如果相等就是最后一天
     }
 
+    /**
+     * 获取当前月的当前天的int转字符返回
+     */
+    fun getCurrentDay(): String{
+        return calendar.get(Calendar.DAY_OF_MONTH).toString()
+    }
 
     /**
      * 求差值时间

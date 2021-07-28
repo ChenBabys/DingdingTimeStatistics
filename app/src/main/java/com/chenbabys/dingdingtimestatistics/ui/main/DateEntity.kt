@@ -1,5 +1,6 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
+import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,7 +9,8 @@ data class DateEntity(
 //    var day: String? = null,//一个月的某天
 //    var monthStr: String? = null,//月份
     var dayOfWeek: Int? = null,//星期几
-    var isToday: Boolean = false, //是否是时间上的今天,没实现
+    //判断了时间和date字段相比较后，如果是今天把这个填充为时间上的今天的list数据下标
+    var isTodayPosition: Int? = null,
     var vacation :Float?= null,//请假的时间
     var dayWorkHour: Float? = null,
 
@@ -50,4 +52,13 @@ data class DateEntity(
         val monthAndDayFormat = SimpleDateFormat("MM-dd")
         return monthAndDayFormat.format(myDate)
     }
+
+    /**
+     * 判断是否是当前时间的今天
+     */
+    fun isToday():Boolean{
+       val currentDay = CalenderUtil.getCurrentDay()
+       return date.toString().contains(currentDay)
+    }
+
 }
