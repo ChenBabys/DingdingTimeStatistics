@@ -72,6 +72,16 @@ object CalenderUtil {
     }
 
     /**
+     * 获取是否是月内的最后一天
+     */
+    fun getIsMonthLastDay(): Boolean {
+        val currentMonthLength = calendar.getMaximum(Calendar.DAY_OF_MONTH)//获取当前月份天数
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+        return currentDay == currentMonthLength//如果相等就是最后一天
+    }
+
+
+    /**
      * 求差值时间
      * 值得格式必须是HH:mm或者HH.mm
      */

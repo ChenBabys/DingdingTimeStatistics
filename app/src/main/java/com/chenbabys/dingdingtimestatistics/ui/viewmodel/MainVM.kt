@@ -14,6 +14,7 @@ import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 class MainVM : BaseViewModel() {
     val dateListChange = MutableLiveData<Boolean>()
     var dateList = mutableListOf<DateEntity>()
+    val lastMonthChange = MutableLiveData<Boolean>()
 
 
     /**
@@ -21,6 +22,10 @@ class MainVM : BaseViewModel() {
      */
     fun getCalendarEntities() {
         dateList = if (CalenderUtil.getCalenderInOne()) {//如果在当月的一号
+            //如果是是一号了，就把当前保存的一号前刚刚过去的那个月的总工时保存起来
+            val justNowLastMonthHours = CacheUtil.getCurrentSaveMonthHours()
+            CacheUtil.setLastMonthHours(justNowLastMonthHours)
+            lastMonthChange.value = true//通知上月时间变化了
             CacheUtil.removeDdtsCache()//清除掉所有的旧数据
             CalenderUtil.getDateEntities()
         } else {

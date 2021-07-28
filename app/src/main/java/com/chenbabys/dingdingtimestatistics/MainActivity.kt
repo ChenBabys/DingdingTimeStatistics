@@ -1,6 +1,7 @@
 package com.chenbabys.dingdingtimestatistics
 
 import android.annotation.SuppressLint
+import android.view.View
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -60,25 +61,32 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         adapter.recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
             totalCount()//统计
         }
+        //上月时间变化
+        viewModel.lastMonthChange.observe(this, Observer {
+            if (CacheUtil.getLastMonthHours() == CacheUtil.defaultFloat) {
+                binding.tvLastMonthCountTotal.visibility = View.GONE
+            } else {
+                binding.tvLastMonthCountTotal.visibility = View.VISIBLE
+                binding.tvLastMonthCountTotal.text = ("上月总工时：${CacheUtil.getLastMonthHours()}小时")
+            }
+        })
     }
 
     /**
      * 做时间统计
      */
     private fun totalCount() {
-        var totalHour: Float = 0.0f
+        var totalHour = 0.0f
         viewModel.dateList.forEach {
             it.dayWorkHour?.let { hour ->
                 totalHour += hour
             }
         }
-        SpanUtils.with(binding.tvCountTotal)
-            .append("(长按方格可以清除时间)")
-            .setForegroundColor(ContextCompat.getColor(mContext, R.color.qing))
-            .appendLine()
-            .append("本月打卡统计时间为：${totalHour}小时").create()
+        binding.tvCountTotal.text = ("本月打卡统计时间为：${totalHour}小时")
         //统计完之后保存到本地cache
         CacheUtil.setDdtsCache(viewModel.dateList)
+        //保存为当前本月总工时,到下月一号的在删除本月数据前去保存为上月总工时~
+        CacheUtil.setThisMonthHours(totalHour)
     }
 
     private var pvTime: TimePickerView? = null

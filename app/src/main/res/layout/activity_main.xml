@@ -8,34 +8,93 @@
     android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
-    <include app:layout_constraintTop_toTopOf="parent"
+    <include
         android:id="@+id/header_title"
-        layout="@layout/item_main_list_head_view"/>
+        layout="@layout/item_main_list_head_view"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/header_title"
-        app:layout_constraintBottom_toTopOf="@id/tv_count_total"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom"
+        app:layout_constraintTop_toBottomOf="@id/header_title" />
 
     <View
         android:id="@+id/line1"
-        app:layout_constraintTop_toBottomOf="@id/rv_content"
         android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:background="@color/purple_500"
-        android:layout_height="0.5dp"/>
+        app:layout_constraintTop_toBottomOf="@id/rv_content" />
 
-    <TextView
-        android:id="@+id/tv_count_total"
-        app:layout_constraintTop_toBottomOf="@id/line1"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
-        android:padding="@dimen/dp_10"
-        android:text="本月打卡统计时间为：0.0小时"
-        android:gravity="center"
-        android:textColor="@color/purple_500"
-        android:textSize="20sp"
+        android:layout_height="100dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="100dp"/>
+        app:layout_constraintTop_toBottomOf="@id/line1">
 
+        <TextView
+            android:id="@+id/tv_last_month_count_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="上月总工时：0.0小时"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textColor="@color/qing"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toStartOf="@id/ll_tips"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_tips"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_last_month_count_total"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginEnd="@dimen/dp_4"
+                android:src="@mipmap/icon_yellow_error"
+                app:layout_constraintBottom_toBottomOf="@id/tv_tips"
+                app:layout_constraintEnd_toStartOf="@id/tv_tips"
+                app:layout_constraintTop_toTopOf="@id/tv_tips" />
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="长按方格可以清除时间"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_count_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:padding="@dimen/dp_10"
+            android:text="本月打卡统计时间为：0.0小时"
+            android:textColor="@color/purple_500"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
