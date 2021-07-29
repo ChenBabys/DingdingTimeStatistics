@@ -92,9 +92,9 @@ object CalenderUtil {
      * 值得格式必须是HH:mm或者HH.mm
      * startTime:上班时间
      * endTime：下班时间
-     * isMoreThanMorning：下班时间是否超过了凌晨
+     * isWeeHours：下班时间是否超过了夜里12点的凌晨
      */
-    fun getDifferenceTime(startTime: String, endTime: String, isMoreThanMorning: Boolean): Float {
+    fun getDifferenceTime(startTime: String, endTime: String, isWeeHours: Boolean): Float {
         val startStr = if (startTime.contains(".")) startTime.replace(".", ":") else startTime
         val endStr = if (endTime.contains(".")) endTime.replace(".", ":") else endTime
         val format = SimpleDateFormat("HH:mm:ss")
@@ -108,7 +108,7 @@ object CalenderUtil {
         //h:小时，s:秒，ms:毫秒
         //1h=3600s=3600*1000=3600000ms
         val h = middleLong / (1000 * 60 * 60).toFloat() //毫秒转换为小时，记得返回float类型数据。
-        return if (isMoreThanMorning) h + 13.0f else h//如果是凌晨则加上一个周期
+        return if (isWeeHours) h + 24.0f else h//如果是凌晨则加上一个周期
     }
 
     /**

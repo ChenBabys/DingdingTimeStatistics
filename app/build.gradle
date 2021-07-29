@@ -92,4 +92,8 @@ dependencies {
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
     //弹窗控件
     implementation 'com.github.goweii:AnyLayer:4.1.4-androidx'
+    //圆角布局 https://github.com/minminaya/GenaralRoundLayout，
+    // 这里面有support库，已经在gp中添加了android.enableJetifier=true来自动转换成x,
+    //但是这里用不到了，直接注释吧
+    //implementation 'com.github.minminaya:GenaralRoundLayout:1.0.0'
 }

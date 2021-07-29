@@ -12,6 +12,7 @@ data class DateEntity(
     //判断了时间和date字段相比较后，如果是今天把这个填充为时间上的今天的list数据下标
     var isTodayPosition: Int? = null,
     var vacation :Float?= null,//请假的时间
+    var isWeeHours :Boolean= false,//是否是凌晨
     var dayWorkHour: Float? = null,
 
     //在适配器中需要使用的字段

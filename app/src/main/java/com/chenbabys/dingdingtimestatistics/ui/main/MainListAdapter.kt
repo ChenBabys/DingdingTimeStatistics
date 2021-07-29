@@ -1,6 +1,7 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
 
+import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
@@ -92,10 +93,10 @@ class MainListAdapter(
             val startHour = CalenderUtil.getTimeFilterHour(startTime.text.toString())
             val endHour = CalenderUtil.getTimeFilterHour(endTime.text.toString())
             val hour = if (endHour < startHour) {//如果下班时间的小时小于上班时间的小时，就证明这家伙凌晨还在上班了
-                LogUtils.d("测试","小于")
+                item.isWeeHours = true
                 CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString(),true)
             } else {
-                LogUtils.d("测试","大于")
+                item.isWeeHours = false
                 CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString(),false)
             }
             item.vacation?.let { vacation -> //请假时间
@@ -108,6 +109,7 @@ class MainListAdapter(
         } else {
             item.dayWorkHour = 0.0f//没填满的时候赋值为0
         }
+
         item.dayWorkHour?.let {//大于或者等于10小时则显示黑色文字，否则是红色文字
             if (it >= 10) {
                 countTime.setTextColor(ContextCompat.getColor(context, R.color.black))
@@ -130,6 +132,15 @@ class MainListAdapter(
                         .setForegroundColor(ContextCompat.getColor(context, R.color.qing)).create()
                 }
             }
+        }
+        //如果下班时间是凌晨的话
+        if (item.isWeeHours){
+            endTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                ContextCompat.getDrawable(context, R.drawable.ic_wee_hours), null, null, null)
+            endTime.setPadding(50,0,50,0)
+        }else{
+            endTime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+            endTime.setPadding(0,0,0,0)
         }
         //一天的总工时
         if (item.dayWorkHour == 0.0f) {
