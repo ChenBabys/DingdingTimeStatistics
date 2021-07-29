@@ -59,5 +59,4 @@ class MainVM : BaseViewModel() {
         return lastCalendar
     }
 
-
 }

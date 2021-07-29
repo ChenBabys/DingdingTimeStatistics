@@ -83,15 +83,18 @@ object CalenderUtil {
     /**
      * 获取当前月的当前天的int转字符返回
      */
-    fun getCurrentDay(): String{
+    fun getCurrentDay(): String {
         return calendar.get(Calendar.DAY_OF_MONTH).toString()
     }
 
     /**
      * 求差值时间
      * 值得格式必须是HH:mm或者HH.mm
+     * startTime:上班时间
+     * endTime：下班时间
+     * isMoreThanMorning：下班时间是否超过了凌晨
      */
-    fun getDifferenceTime(startTime: String, endTime: String): Float {
+    fun getDifferenceTime(startTime: String, endTime: String, isMoreThanMorning: Boolean): Float {
         val startStr = if (startTime.contains(".")) startTime.replace(".", ":") else startTime
         val endStr = if (endTime.contains(".")) endTime.replace(".", ":") else endTime
         val format = SimpleDateFormat("HH:mm:ss")
@@ -105,7 +108,7 @@ object CalenderUtil {
         //h:小时，s:秒，ms:毫秒
         //1h=3600s=3600*1000=3600000ms
         val h = middleLong / (1000 * 60 * 60).toFloat() //毫秒转换为小时，记得返回float类型数据。
-        return h
+        return if (isMoreThanMorning) h + 13.0f else h//如果是凌晨则加上一个周期
     }
 
     /**
@@ -133,5 +136,20 @@ object CalenderUtil {
         return hour.toFloat()
     }
 
+    /**
+     * 获取时间字符中的小时
+     * //默认值给0.0f
+     */
+    fun getTimeFilterHour(time: String): Float {
+        var timeHour: Float = 0.0f
+        if (time.contains(".")) {
+            val timeList = time.split(".")
+            timeHour = timeList[0].toFloat()
+        } else if (time.contains(":")) {
+            val timeList = time.split(":")
+            timeHour = timeList[0].toFloat()
+        }
+        return timeHour
+    }
 
 }

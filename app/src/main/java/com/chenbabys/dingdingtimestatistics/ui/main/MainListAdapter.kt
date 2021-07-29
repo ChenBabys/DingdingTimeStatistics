@@ -4,10 +4,12 @@ package com.chenbabys.dingdingtimestatistics.ui.main
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chenbabys.dingdingtimestatistics.R
+import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
 
@@ -42,15 +44,17 @@ class MainListAdapter(
             onTextViewClickListener.invoke(startTime, item, holder.adapterPosition, true, false)
         }
         startTime.setOnLongClickListener {
-            DialogUtils.showConfirmDialog(
-                "操作删除",
-                "清除${date.text},上班时间为${startTime.text}的选项？",
-                listener = { dialog, which ->
-                    startTime.text = ""
-                    item.startTime = null
-                    item.vacation = null
-                    onTextRemoveListener.invoke()
-                })
+            if (startTime.text.isNotEmpty()) {
+                DialogUtils.showConfirmDialog(
+                    "操作删除",
+                    "清除${date.text},上班时间为${startTime.text}的选项？",
+                    listener = { dialog, which ->
+                        startTime.text = ""
+                        item.startTime = null
+                        item.vacation = null
+                        onTextRemoveListener.invoke()
+                    })
+            }
             true
         }
 
@@ -58,15 +62,17 @@ class MainListAdapter(
             onTextViewClickListener.invoke(endTime, item, holder.adapterPosition, false, false)
         }
         endTime.setOnLongClickListener {
-            DialogUtils.showConfirmDialog(
-                "操作删除",
-                "清除${date.text},下班时间为${endTime.text}的选项？",
-                listener = { dialog, which ->
-                    endTime.text = ""
-                    item.endTime = null
-                    item.vacation = null
-                    onTextRemoveListener.invoke()
-                })
+            if (endTime.text.isNotEmpty()) {
+                DialogUtils.showConfirmDialog(
+                    "操作删除",
+                    "清除${date.text},下班时间为${endTime.text}的选项？",
+                    listener = { dialog, which ->
+                        endTime.text = ""
+                        item.endTime = null
+                        item.vacation = null
+                        onTextRemoveListener.invoke()
+                    })
+            }
             true
         }
 
@@ -81,9 +87,17 @@ class MainListAdapter(
         } else {
             startTime.text = item.startTime//空的时候把上班时间设置为默认值
         }
-        endTime.text = item.endTime//下班时间 ))
+        endTime.text = item.endTime//下班时间
         if (!item.startTime.isNullOrEmpty() && !item.endTime.isNullOrEmpty()) {
-            val hour = CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString())
+            val startHour = CalenderUtil.getTimeFilterHour(startTime.text.toString())
+            val endHour = CalenderUtil.getTimeFilterHour(endTime.text.toString())
+            val hour = if (endHour < startHour) {//如果下班时间的小时小于上班时间的小时，就证明这家伙凌晨还在上班了
+                LogUtils.d("测试","小于")
+                CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString(),true)
+            } else {
+                LogUtils.d("测试","大于")
+                CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString(),false)
+            }
             item.vacation?.let { vacation -> //请假时间
                 //如果超过了上午的四个小时的上班时间，则减去中午休息的两个小时,和请假时间
                 item.dayWorkHour = if (hour > 4) ((hour - 2) - vacation) else (hour - vacation)
@@ -103,11 +117,11 @@ class MainListAdapter(
         } ?: let {
             item.dayWorkHour = 0.0f//空的时候赋值为0
         }
-        if (item.vacation == null) {
+        if (item.vacation == null||item.vacation == CacheUtil.defaultFloat) {
             countTime.text = if (item.dayWorkHour == null) "0h" else item.dayWorkHour.toString() + "h"
         } else {
             when (item.dayWorkHour) {
-                null -> countTime.text = "0h"
+                null -> countTime.text = ("0h")
                 else -> {
                     SpanUtils.with(countTime).append(item.dayWorkHour.toString() + "h")
                         .appendLine()
@@ -122,6 +136,10 @@ class MainListAdapter(
             countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
         } else {
             when (item.vacation) {
+                CacheUtil.defaultFloat->{
+                    countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)
+                }
                 null -> {
                     countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)

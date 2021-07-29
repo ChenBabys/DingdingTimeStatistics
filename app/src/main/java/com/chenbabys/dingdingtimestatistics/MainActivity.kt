@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
+import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
@@ -34,8 +35,12 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                     mutableListOf(if (item.vacation != null) "修改请假时间" else "添加请假时间"),
                     textView, listener = {
                         DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
-                            item.vacation = it
-                            viewModel.dateListChange.value = true
+                            if (it <= item.dayWorkHour!!) {
+                                item.vacation = it
+                                viewModel.dateListChange.value = true
+                            } else {
+                                ToastUtils.showShort("请假时间不能超过今天总工时~")
+                            }
                         })
                     }, -40f, -15f
                 )
