@@ -60,7 +60,10 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     override fun initVm() {
         viewModel.dateListChange.observe(this, Observer {
             adapter.setList(viewModel.dateList)
-            Handler(Looper.getMainLooper()).postDelayed({ scroll2TodayPos() }, 100)
+            if (viewModel.isNeedScroll2CurrentDatePosition) {
+                Handler(Looper.getMainLooper()).postDelayed({ scroll2TodayPos() }, 100)
+                viewModel.isNeedScroll2CurrentDatePosition = false//跳转后本次使用不再有效
+            }
         })
         //所有视图可见时调用(必须在视图可见完成后或者用延时去统计，否则出现统计不准确不完全的问题~)
         adapter.recyclerView.viewTreeObserver.addOnGlobalLayoutListener {

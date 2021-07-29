@@ -16,6 +16,7 @@ class MainVM : BaseViewModel() {
     val dateListChange = MutableLiveData<Boolean>()
     var dateList = mutableListOf<DateEntity>()
     val lastMonthChange = MutableLiveData<Boolean>()
+    var isNeedScroll2CurrentDatePosition = true//默认每次打开程序是需要
 
 
     /**
