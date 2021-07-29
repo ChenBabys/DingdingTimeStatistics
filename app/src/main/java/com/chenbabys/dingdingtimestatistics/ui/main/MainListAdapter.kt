@@ -53,6 +53,7 @@ class MainListAdapter(
                         startTime.text = ""
                         item.startTime = null
                         item.vacation = null
+                        item.isWeeHours = false
                         onTextRemoveListener.invoke()
                     })
             }
@@ -71,6 +72,7 @@ class MainListAdapter(
                         endTime.text = ""
                         item.endTime = null
                         item.vacation = null
+                        item.isWeeHours = false
                         onTextRemoveListener.invoke()
                     })
             }
