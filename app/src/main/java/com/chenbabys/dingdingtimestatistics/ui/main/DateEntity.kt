@@ -13,7 +13,7 @@ data class DateEntity(
     var isTodayPosition: Int? = null,
     var vacation :Float?= null,//请假的时间
     var isWeeHours :Boolean= false,//是否是凌晨
-    var dayWorkHour: Float? = null,
+    var dayWorkHour: Float? = null,//当天总工时
 
     //在适配器中需要使用的字段
     var startTime: String? = null,//上班时间

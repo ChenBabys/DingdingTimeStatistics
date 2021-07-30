@@ -46,10 +46,11 @@ class MainListAdapter(
                     "操作删除",
                     "清除${date.text},上班时间为${startTime.text}的选项？",
                     listener = { dialog, which ->
-                        startTime.text = ""
+                        startTime.text = null
                         item.startTime = null
                         item.vacation = null
                         item.isWeeHours = false
+                        item.dayWorkHour = null
                         onTextRemoveListener.invoke()
                     })
             }
@@ -65,10 +66,11 @@ class MainListAdapter(
                     "操作删除",
                     "清除${date.text},下班时间为${endTime.text}的选项？",
                     listener = { dialog, which ->
-                        endTime.text = ""
+                        endTime.text = null
                         item.endTime = null
                         item.vacation = null
                         item.isWeeHours = false
+                        item.dayWorkHour = null
                         onTextRemoveListener.invoke()
                     })
             }
@@ -161,6 +163,7 @@ class MainListAdapter(
             }
             //左边图标的点击事件
             countTime.setOnClickListener {
+                //这里不能改判断 isModify,有什么判断就回到回调那边去做
                 onTextViewClickListener.invoke(countTime, item, holder.adapterPosition, false, true)
             }
         }

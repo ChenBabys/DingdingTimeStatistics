@@ -11,6 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
+import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
@@ -32,19 +34,27 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         //isModifyTotal:是否是修改工时
         MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
             if (isModifyTotal) {//是添加请假的操作
-                DialogUtils.showMoreDialog(
-                    mutableListOf(if (!(item.vacation?.toString()).isNullOrEmpty()) "修改请假时间" else "添加请假时间"),
-                    textView, listener = {
-                        DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
-                            if (it <= item.dayWorkHour!!) {
-                                item.vacation = it
-                                viewModel.dateListChange.value = true
-                            } else {
-                                ToastUtils.showShort("请假时间不能超过今天总工时~")
-                            }
-                        })
-                    }, -40f, -15f
-                )
+                //todo 这里直接拿的数组的，没有使用上面的item,不止为何用item的话导致一些无数据的项会有一个错乱的问题，也会有显示dayWorkHour不空或者不为0.0f
+                val currentItem = viewModel.dateList[position]//仅用于下面的判断。填充时候不用他，因为只有它不会影响到无数据的项。
+                if (currentItem.dayWorkHour != CacheUtil.defaultFloat && currentItem.dayWorkHour != null) {
+                    DialogUtils.showMoreDialog(
+                        mutableListOf(if (item.vacation == null || item.vacation == CacheUtil.defaultFloat) "添加请假时间" else "修改请假时间"),
+                        textView, listener = {
+                            DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
+                                if (it <= item.dayWorkHour!!) {
+                                    item.vacation = it
+                                    viewModel.dateListChange.value = true
+                                } else {
+                                    ToastUtils.showShort("请假时间不能超过今天总工时~")
+                                }
+                            }, onShowOrHideListener = { show ->
+                                if (!show) {
+                                    KeyboardUtils.hideSoftInput(this)
+                                }
+                            })
+                        }, -40f, -15f
+                    )
+                }
             } else {//普通的其他操作
                 showTimePicker(item, isStartTime, position)
             }
