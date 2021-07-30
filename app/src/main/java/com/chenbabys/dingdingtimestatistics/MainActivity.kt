@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
             if (isModifyTotal) {//是添加请假的操作
                 DialogUtils.showMoreDialog(
-                    mutableListOf(if (item.vacation != null) "修改请假时间" else "添加请假时间"),
+                    mutableListOf(if (!(item.vacation?.toString()).isNullOrEmpty()) "修改请假时间" else "添加请假时间"),
                     textView, listener = {
                         DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
                             if (it <= item.dayWorkHour!!) {
@@ -143,6 +144,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         }.setLayoutRes(R.layout.pickview_costom_time) { view ->
             val tvCancel = view?.findViewById<Button>(R.id.btnCancel)
             val tvSubmit = view?.findViewById<Button>(R.id.btnSubmit)
+            val tvTitle = view?.findViewById<TextView>(R.id.tvTitle)
+            tvTitle?.text = if (isStartTime) "选择上班时间" else "选择下班时间"
             tvSubmit?.setOnClickListener {
                 pvTime?.returnData()
                 pvTime?.dismiss()

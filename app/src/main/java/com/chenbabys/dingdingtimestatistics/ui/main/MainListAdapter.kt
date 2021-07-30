@@ -1,11 +1,7 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
-
-
-import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -102,11 +98,12 @@ class MainListAdapter(
                 CalenderUtil.getDifferenceTime(startTime.text.toString(), endTime.text.toString(),false)
             }
             item.vacation?.let { vacation -> //请假时间
-                //如果超过了上午的四个小时的上班时间，则减去中午休息的两个小时,和请假时间
-                item.dayWorkHour = if (hour > 4) ((hour - 2) - vacation) else (hour - vacation)
+                ///todo 以后可以做适配方式，不必按照写死的9.上班来统计，下同
+                //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时,和请假时间（这里默认上班时间是9.）
+                item.dayWorkHour = if (hour >= 5) ((hour - 2) - vacation) else (hour - vacation)
             } ?: let {
-                //如果超过了上午的四个小时的上班时间，则减去中午休息的两个小时
-                item.dayWorkHour = if (hour > 4) hour - 2 else hour
+                //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时（这里默认上班时间是9.）
+                item.dayWorkHour = if (hour >= 5) hour - 2 else hour
             }
         } else {
             item.dayWorkHour = 0.0f//没填满的时候赋值为0
