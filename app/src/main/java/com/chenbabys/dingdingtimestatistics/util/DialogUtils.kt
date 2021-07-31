@@ -181,7 +181,7 @@ object DialogUtils {
                 return@setOnClickListener
             }
             ///todo 哈哈哈。也不知哪个手贱的会输入一堆...，这里的判断暂且这样，没想到更好的适配，以后再说
-            if (inputBoxStr == "."||inputBoxStr == ".."||inputBoxStr == "..."||inputBoxStr == "...."){
+            if (inputBoxStr == "."||inputBoxStr == ".."||inputBoxStr == "..."||inputBoxStr == "...."||inputBoxStr == "....."){
                 ToastUtils.showShort("请输入合法的请假时间")
                 return@setOnClickListener
             }
