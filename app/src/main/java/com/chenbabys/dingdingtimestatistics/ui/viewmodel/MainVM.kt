@@ -2,6 +2,7 @@ package com.chenbabys.dingdingtimestatistics.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
@@ -23,11 +24,10 @@ class MainVM : BaseViewModel() {
      * 获取日历
      */
     fun getCalendarEntities() {
-        dateList = if (CalenderUtil.getCalenderInOne()) {//如果在当月的一号
-            //如果是是一号了，就把当前保存的一号前刚刚过去的那个月的总工时保存起来
+        dateList = if (CalenderUtil.getThisMonth() != CacheUtil.getMonth()) {//如果月份不同了就更新
+            CacheUtil.setMonth(CalenderUtil.getThisMonth())//同步当前月
             val justNowLastMonthHours = CacheUtil.getCurrentSaveMonthHours()
             CacheUtil.setLastMonthHours(justNowLastMonthHours)
-            lastMonthChange.value = true//通知上月时间变化了
             CacheUtil.removeDdtsCache()//清除掉所有的旧数据
             CalenderUtil.getDateEntities()
         } else {
@@ -37,6 +37,7 @@ class MainVM : BaseViewModel() {
                 CacheUtil.getDdtsCache()
             }
         }
+        lastMonthChange.value = true//通知刷新上个月时间，如果不空则会显示
         dateListChange.value = true
     }
 

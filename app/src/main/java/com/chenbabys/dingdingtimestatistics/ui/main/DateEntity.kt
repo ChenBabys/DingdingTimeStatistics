@@ -1,24 +1,27 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
+import com.blankj.utilcode.util.LogUtils
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
 data class DateEntity(
     var date: Date? = null,//具体日期
-//    var day: String? = null,//一个月的某天
-//    var monthStr: String? = null,//月份
+    var day: Int? = null,//一个月的某天
+    var month: Int? = null,//月份
     var dayOfWeek: Int? = null,//星期几
     //判断了时间和date字段相比较后，如果是今天把这个填充为时间上的今天的list数据下标
     var isTodayPosition: Int? = null,
-    var vacation :Float?= null,//请假的时间
-    var isWeeHours :Boolean= false,//是否是凌晨
+    var vacation: Float? = null,//请假的时间
+    var isWeeHours: Boolean = false,//是否是凌晨
     var dayWorkHour: Float? = null,//当天总工时
 
     //在适配器中需要使用的字段
     var startTime: String? = null,//上班时间
     var endTime: String? = null,//下班时间
 
+    //每周的休息方式，1单休，2双休
+    var weekRestType: Int? = null
 ) {
 
     /**
@@ -57,9 +60,10 @@ data class DateEntity(
     /**
      * 判断是否是当前时间的今天
      */
-    fun isToday():Boolean{
-       val currentDay = CalenderUtil.getCurrentDay()
-       return date.toString().contains(currentDay)
+    fun isToday(): Boolean {
+        val currentDay = CalenderUtil.getCurrentDay()
+        val currentMonth = CalenderUtil.getThisMonth()
+        return (day == currentDay) && (month == currentMonth)
     }
 
 }

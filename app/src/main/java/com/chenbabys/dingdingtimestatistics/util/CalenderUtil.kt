@@ -54,6 +54,8 @@ object CalenderUtil {
             val entity = DateEntity().apply {
                 date = thisDate
                 dayOfWeek = thisDayOfWeek
+                month = calendar.get(Calendar.MONTH) + 1
+                day = calendar.get(Calendar.DAY_OF_MONTH)
             }
             dateEntities.add(entity)
         }
@@ -67,8 +69,8 @@ object CalenderUtil {
     /**
      * 获取本月月份(+1，因为月份是从0开始)
      */
-    fun getThisMonth(): String {
-        return (calendar.get(Calendar.MONTH) + 1).toString()
+    fun getThisMonth(): Int {
+        return calendar.get(Calendar.MONTH) + 1
     }
 
     /**
@@ -81,10 +83,10 @@ object CalenderUtil {
     }
 
     /**
-     * 获取当前月的当前天的int转字符返回
+     * 获取当前月的当前天的int返回
      */
-    fun getCurrentDay(): String {
-        return calendar.get(Calendar.DAY_OF_MONTH).toString()
+    fun getCurrentDay(): Int {
+        return calendar.get(Calendar.DAY_OF_MONTH)
     }
 
     /**

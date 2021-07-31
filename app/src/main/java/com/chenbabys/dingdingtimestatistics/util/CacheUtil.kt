@@ -59,4 +59,18 @@ object CacheUtil {
 
     fun removeCurrentSaveMonthHours() = cache.removeValueForKey("calender_this_month_hours")
 
+
+
+    /**
+     * 设置月
+     */
+    fun setMonth(month: Int) {
+        cache.encode("calender_month", month)
+    }
+
+    fun getMonth(): Int = cache.decodeInt("calender_month", -1)
+
+    fun removeMonth() = cache.removeValueForKey("calender_month")
+
+
 }

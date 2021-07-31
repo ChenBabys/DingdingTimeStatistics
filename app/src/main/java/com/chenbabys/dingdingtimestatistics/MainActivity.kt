@@ -64,6 +64,9 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     }
 
     override fun initView() {
+//        DialogUtils.showConfirmSingleWeekOrDialog(mContext, onConfirmClick = {
+//            ToastUtils.showShort(it)
+//        })
         title = "打卡统计（本月是：${CalenderUtil.getThisMonth()}月）"
         with(binding) {
             rvContent.layoutManager = LinearLayoutManager(mContext)

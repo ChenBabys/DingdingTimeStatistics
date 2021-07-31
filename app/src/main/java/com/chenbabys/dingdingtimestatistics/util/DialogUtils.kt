@@ -9,10 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.ScreenUtils
@@ -20,6 +17,7 @@ import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.R
 import com.chenbabys.dingdingtimestatistics.databinding.DialogValueTipsChildBinding
+import com.chenbabys.dingdingtimestatistics.databinding.DialogViewSettingWeekSingleOrDoubleRestBinding
 import per.goweii.anylayer.ActivityHolder
 import per.goweii.anylayer.AnyLayer
 import per.goweii.anylayer.Layer
@@ -180,8 +178,8 @@ object DialogUtils {
                 ToastUtils.showShort("请输入请假时间")
                 return@setOnClickListener
             }
-            ///todo 哈哈哈。也不知哪个手贱的会输入一堆...，这里的判断暂且这样，没想到更好的适配，以后再说
-            if (inputBoxStr == "."||inputBoxStr == ".."||inputBoxStr == "..."||inputBoxStr == "...."||inputBoxStr == "....."){
+            //如果包含两个..，或者直接等于一个.则
+            if (inputBoxStr.contains("..") || inputBoxStr == ".") {
                 ToastUtils.showShort("请输入合法的请假时间")
                 return@setOnClickListener
             }
@@ -195,5 +193,53 @@ object DialogUtils {
         layoutParams.width = ScreenUtils.getScreenWidth()
         return dialog
     }
+
+
+    /**
+     * 显示确定单双休的弹框，本程序安装后只会执行一次~
+     * //weekRestType:每周的休息方式，1单休，2双休
+     */
+    fun showConfirmSingleWeekOrDialog(
+        context: Context, onConfirmClick: (weekRestType: Int) -> Unit,
+        onShowOrHideListener: ((isShow: Boolean) -> Unit)? = null//可空
+    ): DialogLayer {
+        val binding =
+            DialogViewSettingWeekSingleOrDoubleRestBinding.inflate(LayoutInflater.from(context))
+        val dialog = AnyLayer.dialog(context)
+            .contentView(binding.root)
+            .backgroundDimDefault()
+            .compatSoftInput(true)//适应输入弹框上移
+            .gravity(Gravity.CENTER)
+            .doOnShow {
+                onShowOrHideListener?.invoke(true)
+            }
+            .doOnDismiss {
+                onShowOrHideListener?.invoke(false)
+            }
+            .contentAnimator(object : Layer.AnimatorCreator {
+                override fun createInAnimator(target: View): Animator {
+                    return AnimatorHelper.createDelayedZoomInAnim(binding.root)
+                }
+
+                override fun createOutAnimator(target: View): Animator {
+                    return AnimatorHelper.createDelayedZoomOutAnim(binding.root)
+                }
+
+            }).cancelableOnTouchOutside(false).cancelableOnClickKeyBack(false)
+        dialog.show()
+
+        binding.tvConfirm.setOnClickListener {
+            val checkType = if (binding.gpGroup.checkedRadioButtonId == R.id.rb_single) 1 else 2
+            onConfirmClick.invoke(checkType)
+            dialog.dismiss()
+            KeyboardUtils.hideSoftInput(it)
+        }
+        //不加这段布局就扭曲~
+        val layoutParams = dialog.contentView!!.layoutParams
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        layoutParams.width = (ScreenUtils.getAppScreenWidth() * 0.8).toInt()
+        return dialog
+    }
+
 
 }
