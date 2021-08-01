@@ -67,6 +67,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
 //        DialogUtils.showConfirmSingleWeekOrDialog(mContext, onConfirmClick = {
 //            ToastUtils.showShort(it)
 //        })
+//        CacheUtil.setLastMonthHours(254.01666f)//测试
         title = "打卡统计（本月是：${CalenderUtil.getThisMonth()}月）"
         with(binding) {
             rvContent.layoutManager = LinearLayoutManager(mContext)
@@ -105,7 +106,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     private fun scroll2TodayPos() {
         adapter.data.forEach { data -> //遍历查找当前日期所在的下标,而后跳转到指定下标
             data.isTodayPosition?.let { pos ->
-                binding.rvContent.smoothScrollToPosition(pos)
+                if (pos + 1 == data.day) binding.rvContent.smoothScrollToPosition(pos)
             }
         }
     }

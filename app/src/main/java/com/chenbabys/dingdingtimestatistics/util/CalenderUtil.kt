@@ -23,7 +23,8 @@ object CalenderUtil {
 //        @SuppressLint("SimpleDateFormat") val formatMonthDay = SimpleDateFormat("MM-dd")
 //        @SuppressLint("SimpleDateFormat") val formatYear = SimpleDateFormat("yyyy")
         //calendar.set(Calendar.MONTH,6)//不设置月份就是默认当前月份
-        val monthLength = calendar.getMaximum(Calendar.DAY_OF_MONTH)//获取当前月份天数
+        //val monthLength = calendar.getMaximum(Calendar.DAY_OF_MONTH)//获取一个月可能存在的最大天数，也即是31
+        val monthLength = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)//获取当前月份最大天数，与上不同
 
         //--------- 第一种做法，没成功，暂时没找到缘故------------//
 //        calendar.set(Calendar.DAY_OF_MONTH,1)//日历设置为本月第一天
