@@ -13,6 +13,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
@@ -106,7 +107,12 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     private fun scroll2TodayPos() {
         adapter.data.forEach { data -> //遍历查找当前日期所在的下标,而后跳转到指定下标
             data.isTodayPosition?.let { pos ->
-                if (pos + 1 == data.day) binding.rvContent.smoothScrollToPosition(pos)
+                if (pos + 1 == data.day) {
+                        //这种方式是最准确的，并且微信的根据字母跳转也是用这种方式
+                        //第一个参数是跳转到指定下标，第二个是偏移多少像素
+                    (binding.rvContent.layoutManager as LinearLayoutManager)
+                        .scrollToPositionWithOffset(pos,(ScreenUtils.getScreenHeight() * 0.4).toInt())
+                }
             }
         }
     }
