@@ -13,4 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="spanTheme" parent="Theme.DingdingTimeStatistics">
+        <item name="android:windowBackground">@mipmap/ic_daka</item>
+    </style>
 </resources>
