@@ -30,6 +30,7 @@ import java.util.*
  *主页
  */
 class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
+
     private val adapter by lazy {
         //textView当前点击的textview,item,当前项的相关数据和字段，position当前下标，isStartTime当前是否是选择的是添加上班时间
         //isModifyTotal:是否是修改工时
@@ -174,10 +175,11 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 pvTime?.dismiss()
             }
         }.setType(booleanArrayOf(false, false, false, true, true, false)) // 默认全部显示
-            .setContentTextSize(18)
+            .setContentTextSize(20)
+            .setItemVisibleCount(5)
             .setDate(lastChooseCalendar)//设置上次时间
             .setLabel("年", "月", "日", "时", "分", "秒")
-            .setLineSpacingMultiplier(1.2f)
+            .setLineSpacingMultiplier(2.0f)
             .setTextXOffset(0, 0, 0, 40, 0, -40)
             .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
             .setDividerColor(ContextCompat.getColor(mContext, R.color.gray)).build()

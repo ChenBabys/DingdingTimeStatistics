@@ -15,6 +15,8 @@
     </style>
 
     <style name="spanTheme" parent="Theme.DingdingTimeStatistics">
-        <item name="android:windowBackground">@mipmap/ic_daka</item>
+        <item name="android:windowBackground">@mipmap/bg</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>
