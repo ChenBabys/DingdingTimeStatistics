@@ -16,7 +16,7 @@ class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
         Handler(mainLooper).postDelayed({
             startActivity(Intent(mContext, MainActivity::class.java))
             finish()
-        }, 500)
+        }, 2000)
     }
 
     override fun initVm() {
