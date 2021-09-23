@@ -97,7 +97,6 @@ object CalenderUtil {
         return calendar.get(Calendar.HOUR_OF_DAY)
     }
 
-
     /**
      * 求差值时间
      * 值得格式必须是HH:mm或者HH.mm

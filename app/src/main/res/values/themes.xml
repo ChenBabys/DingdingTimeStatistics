@@ -15,7 +15,7 @@
     </style>
 
     <style name="spanTheme" parent="Theme.DingdingTimeStatistics">
-        <item name="android:windowBackground">@mipmap/ic_goodmorning</item>
+        <item name="android:windowBackground">@mipmap/ic_goodnight</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>

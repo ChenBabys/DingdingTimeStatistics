@@ -11,10 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
-import com.blankj.utilcode.util.KeyboardUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ScreenUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.*
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
 import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
@@ -70,14 +67,30 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
 //            ToastUtils.showShort(it)
 //        })
 //        CacheUtil.setLastMonthHours(254.01666f)//测试
-        title = "打卡统计（本月是：${CalenderUtil.getThisMonth()}月）"
+        //title = "打卡统计（本月是：${CalenderUtil.getThisMonth()}月）"
         with(binding) {
             rvContent.layoutManager = LinearLayoutManager(mContext)
             rvContent.adapter = adapter
         }
         //获取日历数据
         viewModel.getCalendarEntities()
+        //初始化动态时间
+        initTime()
     }
+
+    /**
+     * 同步系统时间展示
+     */
+    private fun initTime() {
+        val timeStr = format.format(Date(System.currentTimeMillis()))
+        title = SpanUtils().append("当前时间：").setFontSize(16,true)
+            .append(timeStr).setFontSize(22,true).create()
+        //延时1s从新赋值后又开始延时，周而复始
+        Handler(mainLooper).postDelayed({
+            initTime()
+        },1000)
+    }
+
 
     override fun initVm() {
         viewModel.dateListChange.observe(this, Observer {
@@ -139,6 +152,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
 
     @SuppressLint("SimpleDateFormat")
     private val formatTime = SimpleDateFormat("HH:mm")
+    @SuppressLint("SimpleDateFormat")
+    private val format = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss")
 
     /**
      * 显示时间选择器
