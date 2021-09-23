@@ -16,4 +16,6 @@
     <color name="yellow_deep">#FFD600</color>
     <color name="lite_gay">#E6E6E6</color>
     <color name="pink">#FF00DF</color>
+    <color name="high_color_pink">#FF32CD</color>
+    <color name="high_color_blue">#00DFFF</color>
 </resources>

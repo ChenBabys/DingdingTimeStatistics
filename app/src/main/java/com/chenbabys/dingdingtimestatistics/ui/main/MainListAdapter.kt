@@ -83,7 +83,7 @@ class MainListAdapter(
             when (item.isWeekEnd()) {
                 true -> startTime.text = ""
                 false -> {
-                    startTime.text = ("9:00")
+                    startTime.text = ("09:00")
                     item.startTime = startTime.text.toString()
                 }//空的时候把上班时间设置为默认值
             }
@@ -104,10 +104,24 @@ class MainListAdapter(
             item.vacation?.let { vacation -> //请假时间
                 ///todo 以后可以做适配方式，不必按照写死的9.上班来统计，下同
                 //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时,和请假时间（这里默认上班时间是9.）
-                item.dayWorkHour = if (hour >= 5) ((hour - 2) - vacation) else (hour - vacation)
+                //并且开始的时间是小于下午14点的
+                item.dayWorkHour = if (startHour<14 && hour>=5) {
+                   if (startHour > 12){
+                       ((hour - (14 - startHour)) - vacation)
+                   }else{
+                       ((hour - 2) - vacation)
+                   }
+                } else (hour - vacation)
             } ?: let {
                 //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时（这里默认上班时间是9.）
-                item.dayWorkHour = if (hour >= 5) hour - 2 else hour
+                //并且开始的时间是小于下午14点的
+                item.dayWorkHour = if (startHour<14 && hour >= 5) {
+                    if (startHour>12){
+                        hour - (14 - startHour)
+                    }else{
+                        hour - 2
+                    }
+                } else hour
             }
         } else {
             item.dayWorkHour = 0.0f//没填满的时候赋值为0

@@ -91,6 +91,14 @@ object CalenderUtil {
     }
 
     /**
+     * 获取当前的小时（按照24小时制返回）
+     */
+    fun getCurrentHour(): Int {
+        return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+
+
+    /**
      * 求差值时间
      * 值得格式必须是HH:mm或者HH.mm
      * startTime:上班时间
