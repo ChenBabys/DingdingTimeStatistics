@@ -64,8 +64,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     }
 
     override fun initView() {
-        //蒲公英的检测更新
-        PgyerSDKManager.checkSoftwareUpdate(this)
+        //蒲公英的手动检测更新，.App中已经添加了自动检测更新
+        //PgyerSDKManager.checkSoftwareUpdate(this)
         //测试,可以直接填充上月工时
         //CacheUtil.setLastMonthHours(254.01666f)
         with(binding) {
