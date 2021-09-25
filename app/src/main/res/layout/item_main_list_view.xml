@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/ll_parent"
-    android:background="@color/white"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -35,9 +34,7 @@
             android:digits=":.0123456789"
             android:gravity="center_horizontal|center"
             android:hint="选择上班时间"
-            android:imeActionLabel="保存"
-            android:imeOptions="actionDone"
-            android:inputType="number"
+            android:textColorHint="@color/gray_few_deep"
             android:singleLine="true"
             android:text="09:00"
             android:textColor="@color/orange"
@@ -49,15 +46,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:drawableStart="@drawable/ic_wee_hours"
             android:digits=":.0123456789"
             android:gravity="center_horizontal|center"
             android:hint="选择下班时间"
-            android:imeOptions="actionDone"
-            android:inputType="number"
+            android:textColorHint="@color/gray_few_deep"
             android:singleLine="true"
             android:textColor="@color/orange"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/ic_wee_hours" />
 
 
         <TextView

@@ -11,6 +11,7 @@
     <color name="gray_lite">#E4E3E3</color>
     <color name="gray">#A5AAAE</color>
     <color name="gray_few">#F2F2F2</color>
+    <color name="gray_few_deep">#CFCECE</color>
     <color name="gray_deep">#8D8C8B</color>
     <color name="gray_white">#F5F5F5</color>
     <color name="red">#FF0000</color>
