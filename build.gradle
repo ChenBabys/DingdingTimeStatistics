@@ -20,6 +20,9 @@ allprojects {
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
         maven { url 'https://jitpack.io' }
+        //用于对蒲公英使用统计和更新检查以及异常上报的
+        maven { url "https://frontjs-static.pgyer.com/dist/sdk/pgyersdk" }  //蒲公英主力仓库
+        maven { url "https://raw.githubusercontent.com/Pgyer/analytics/master" }  //蒲公英备用仓库（主力仓库下载不下来使用）
     }
 }
 

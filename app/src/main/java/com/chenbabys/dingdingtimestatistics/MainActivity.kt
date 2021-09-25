@@ -20,6 +20,7 @@ import com.chenbabys.dingdingtimestatistics.ui.viewmodel.MainVM
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
+import com.pgyer.pgyersdk.PgyerSDKManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,12 +64,17 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     }
 
     override fun initView() {
-//        CacheUtil.setLastMonthHours(254.01666f)//测试,可以直接填充上月工时
-        BarUtils.addMarginTopEqualStatusBarHeight(binding.titleBar.placeHolderView)//给状态栏的占用重新定义高度
+        //蒲公英的检测更新
+        PgyerSDKManager.checkSoftwareUpdate(this)
+        //测试,可以直接填充上月工时
+        //CacheUtil.setLastMonthHours(254.01666f)
         with(binding) {
+            //给状态栏的占用重新定义高度
+            BarUtils.addMarginTopEqualStatusBarHeight(titleBar.placeHolderView)
+            //rv的样式初始化和设置适配器
             rvContent.layoutManager = LinearLayoutManager(mContext)
             rvContent.adapter = adapter
-            //加个点击时动画
+            //给统计的文字加个点击时动画
             ClickUtils.applyPressedViewAlpha(tvCountTotal)
             ClickUtils.applyPressedViewScale(tvCountTotal)
         }
@@ -212,6 +218,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
      */
     override fun onDestroy() {
         super.onDestroy()
+        PgyerSDKManager.reportException(Exception("销毁一次主应用，本次上传仅为做记录测试"))
         pvTime = null
     }
 

@@ -96,4 +96,6 @@ dependencies {
     // 这里面有support库，已经在gp中添加了android.enableJetifier=true来自动转换成x,
     //但是这里用不到了，直接注释吧
     //implementation 'com.github.minminaya:GenaralRoundLayout:1.0.0'
+    ///用于对蒲公英使用统计和更新检查以及异常上报的
+    implementation 'com.pgyer:analytics:4.2.0'
 }
