@@ -63,14 +63,14 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     }
 
     override fun initView() {
-//        DialogUtils.showConfirmSingleWeekOrDialog(mContext, onConfirmClick = {
-//            ToastUtils.showShort(it)
-//        })
-//        CacheUtil.setLastMonthHours(254.01666f)//测试
-        //title = "打卡统计（本月是：${CalenderUtil.getThisMonth()}月）"
+//        CacheUtil.setLastMonthHours(254.01666f)//测试,可以直接填充上月工时
+        BarUtils.addMarginTopEqualStatusBarHeight(binding.titleBar.placeHolderView)//给状态栏的占用重新定义高度
         with(binding) {
             rvContent.layoutManager = LinearLayoutManager(mContext)
             rvContent.adapter = adapter
+            //加个点击时动画
+            ClickUtils.applyPressedViewAlpha(tvCountTotal)
+            ClickUtils.applyPressedViewScale(tvCountTotal)
         }
         //获取日历数据
         viewModel.getCalendarEntities()
@@ -83,8 +83,13 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
      */
     private fun initTime() {
         val timeStr = format.format(Date(System.currentTimeMillis()))
-        title = SpanUtils().append("当前时间：").setFontSize(16,true)
-            .append(timeStr).setFontSize(22,true).create()
+        SpanUtils.with(binding.titleBar.tvTitle)
+            .append(CalenderUtil.getWeekCurrent())
+            .setFontSize(16,true)
+            .appendSpace(20)
+            .append(timeStr)
+            .setFontSize(22,true)
+            .create()
         //延时1s从新赋值后又开始延时，周而复始
         Handler(mainLooper).postDelayed({
             initTime()
@@ -197,7 +202,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
             .setLineSpacingMultiplier(2.0f)
             .setTextXOffset(0, 0, 0, 40, 0, -40)
             .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-            .setDividerColor(ContextCompat.getColor(mContext, R.color.gray)).build()
+            .setDividerColor(ContextCompat.getColor(mContext, R.color.gray_lite)).build()
         pvTime?.show()
     }
 

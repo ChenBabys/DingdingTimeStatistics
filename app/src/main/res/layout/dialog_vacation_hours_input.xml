@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="23dp"
-            android:background="@color/gray"
+            android:background="@color/gray_lite"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="请输入请假时间（格式：2或者2.5格式，单位小时）"
+            android:text="请输入请假时间（格式：2或2.x,单位为小时）"
             android:textColor="@color/gray"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"

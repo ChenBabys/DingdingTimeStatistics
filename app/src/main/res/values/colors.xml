@@ -8,14 +8,20 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#F5FF8D</color>
-    <color name="gray">#AEAEAE</color>
+    <color name="gray_lite">#E4E3E3</color>
+    <color name="gray">#A5AAAE</color>
+    <color name="gray_few">#F2F2F2</color>
+    <color name="gray_deep">#8D8C8B</color>
+    <color name="gray_white">#F5F5F5</color>
     <color name="red">#FF0000</color>
     <color name="qing">#06F3A7</color>
     <color name="lite_pink">#FF80AB</color>
-    <color name="orange">#FF6D00</color>
+    <color name="orange">#FC7B1A</color>
     <color name="yellow_deep">#FFD600</color>
-    <color name="lite_gay">#E6E6E6</color>
+    <color name="orange_lite">#F5A623</color>
     <color name="pink">#FF00DF</color>
     <color name="high_color_pink">#FF32CD</color>
     <color name="high_color_blue">#00DFFF</color>
+    <color name="lite_blue">#8ec5fc</color>
+    <color name="a_lite_pink">#e0c3fc</color>
 </resources>

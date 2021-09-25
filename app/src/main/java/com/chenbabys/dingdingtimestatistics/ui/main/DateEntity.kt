@@ -26,6 +26,7 @@ data class DateEntity(
 
     /**
      * 获取星期的格式化
+     * dayOfWeek是根据星期获取的数目减一而来。从而适配自己想要的样式
      */
     fun getWeekFormat(): String {
         return when (dayOfWeek) {

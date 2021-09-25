@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.blankj.utilcode.util.BarUtils
 import com.jiuxiaoer.ctms.api.error.ErrorResult
 import java.lang.reflect.ParameterizedType
 
@@ -20,6 +21,10 @@ abstract class BaseActivity<VM: BaseViewModel,VB: ViewBinding>() :AppCompatActiv
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //透明状态栏，它也会把状态栏的原来高度删除掉，底下的布局会并上去
+        BarUtils.transparentStatusBar(this)
+        //高亮状态栏
+        BarUtils.isNavBarLightMode(this)
         //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
         val type =javaClass.genericSuperclass as ParameterizedType
         val clazz1 = type.actualTypeArguments[0] as Class<VM>

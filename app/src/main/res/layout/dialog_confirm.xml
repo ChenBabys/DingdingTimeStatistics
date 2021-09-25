@@ -24,6 +24,7 @@
         android:layout_marginLeft="21dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="21dp"
+        android:lineSpacingExtra="5dp"
         android:gravity="center_horizontal"
         android:text="我们将以电话的形式告知您验证码，您将会接到1010-5959的来电，请放心接听"
         android:textColor="@color/black"
@@ -35,7 +36,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="15dp"
-        android:background="@color/gray" />
+        android:background="@color/gray_lite" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +51,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="取消"
-            android:textColor="#ff8d8d93"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <View
@@ -69,7 +70,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="现在接听"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             android:textSize="18sp" />
     </LinearLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,6 +2,7 @@ package com.chenbabys.dingdingtimestatistics.ui.main
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import com.blankj.utilcode.util.ClickUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -26,19 +27,25 @@ class MainListAdapter(
             date.text = ("${item.getFotMatMonthDay(it)}\n${item.getWeekFormat()}")
             when {
                 item.isWeekEnd() -> {
-                    date.setTextColor(ContextCompat.getColor(context, R.color.yellow_deep))
+                    date.setTextColor(ContextCompat.getColor(context, R.color.gray_deep))
                 }
                 item.isToday() -> {
-                    date.setTextColor(ContextCompat.getColor(context, R.color.pink))
+                    date.setTextColor(ContextCompat.getColor(context, R.color.yellow_deep))
                 }
                 else -> {
-                    date.setTextColor(ContextCompat.getColor(context, R.color.purple_500))
+                    date.setTextColor(ContextCompat.getColor(context, R.color.lite_blue))
                 }
             }
         }
         val startTime = holder.getView<TextView>(R.id.tv_start_time)
         val endTime = holder.getView<TextView>(R.id.tv_end_time)
         val countTime = holder.getView<TextView>(R.id.tv_count)
+        //添加一个缩放和透明度的动画
+        ClickUtils.applyPressedViewAlpha(countTime)
+        ClickUtils.applyPressedViewScale(countTime)
+        //添加一个缩放和透明度的动画
+        ClickUtils.applyPressedViewAlpha(startTime)
+        ClickUtils.applyPressedViewScale(startTime)
         startTime.setOnClickListener {
             onTextViewClickListener.invoke(startTime, item, holder.adapterPosition, true, false)
         }
@@ -46,7 +53,7 @@ class MainListAdapter(
             if (startTime.text.isNotEmpty()) {
                 DialogUtils.showConfirmDialog(
                     "操作删除",
-                    "清除${date.text},上班时间为${startTime.text}的选项？",
+                    "清除${date.text}\n上班时间为${startTime.text}的选项？",
                     listener = { dialog, which ->
                         startTime.text = null
                         item.startTime = null
@@ -58,7 +65,9 @@ class MainListAdapter(
             }
             true
         }
-
+        //添加一个缩放和透明度的动画
+        ClickUtils.applyPressedViewAlpha(endTime)
+        ClickUtils.applyPressedViewScale(endTime)
         endTime.setOnClickListener {
             onTextViewClickListener.invoke(endTime, item, holder.adapterPosition, false, false)
         }
@@ -66,7 +75,7 @@ class MainListAdapter(
             if (endTime.text.isNotEmpty()) {
                 DialogUtils.showConfirmDialog(
                     "操作删除",
-                    "清除${date.text},下班时间为${endTime.text}的选项？",
+                    "清除${date.text}\n下班时间为${endTime.text}的选项？",
                     listener = { dialog, which ->
                         endTime.text = null
                         item.endTime = null
@@ -185,7 +194,7 @@ class MainListAdapter(
         }
         val parentView = holder.getView<LinearLayoutCompat>(R.id.ll_parent)
         if (item.isToday()) {//如果是今天
-            parentView.setBackgroundColor(ContextCompat.getColor(context, R.color.lite_gay))
+            parentView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_few))
             item.isTodayPosition = holder.adapterPosition
         } else {
             parentView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))

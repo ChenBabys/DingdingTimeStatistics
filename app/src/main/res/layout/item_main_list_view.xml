@@ -13,7 +13,7 @@
         android:layout_height="60dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:divider="@color/gray"
+        app:divider="@color/gray_lite"
         app:showDividers="middle">
 
         <TextView
@@ -40,7 +40,7 @@
             android:inputType="number"
             android:singleLine="true"
             android:text="09:00"
-            android:textColor="@color/qing"
+            android:textColor="@color/orange"
             android:textSize="15sp" />
         <!--       以下提示黄色的都是以为TExtView替代了EditText缘故
         要设置singleline,否则不起效-->
@@ -80,5 +80,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/gray" />
+        android:background="@color/gray_lite" />
 </androidx.appcompat.widget.LinearLayoutCompat>

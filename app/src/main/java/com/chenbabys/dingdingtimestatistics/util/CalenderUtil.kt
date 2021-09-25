@@ -51,7 +51,7 @@ object CalenderUtil {
         for (index in 1..monthLength) {
             calendar.set(Calendar.DAY_OF_MONTH, index)
             val thisDate = calendar.time
-            val thisDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1//星期也是从0开始的，所以这样
+            val thisDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1//减一适配当前星期，让0变成星期天
             val entity = DateEntity().apply {
                 date = thisDate
                 dayOfWeek = thisDayOfWeek
@@ -160,6 +160,25 @@ object CalenderUtil {
             timeHour = timeList[0].toFloat()
         }
         return timeHour
+    }
+
+    /**
+     * 获取星期几
+     * 减一以适配样式
+     * 不减一的话就按照西方的星期样式，第一天是1也就是星期天。以此递增
+     * 减一就把0当天星期天了，而后的数字就刚好适配到星期的数目
+     */
+    fun getWeekCurrent():String{
+        return when (calendar.get(Calendar.DAY_OF_WEEK) - 1) {
+            0 -> "星期天"
+            1 -> "星期一"
+            2 -> "星期二"
+            3 -> "星期三"
+            4 -> "星期四"
+            5 -> "星期五"
+            6 -> "星期六"
+            else -> "不在范围"
+        }
     }
 
 }
