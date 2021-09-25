@@ -136,9 +136,9 @@ class MainListAdapter(
             item.dayWorkHour = 0.0f//没填满的时候赋值为0
         }
 
-        item.dayWorkHour?.let {//大于或者等于10小时则显示黑色文字，否则是红色文字
+        item.dayWorkHour?.let {//大于或者等于10小时则显示主题色文字，否则是红色文字
             if (it >= 10) {
-                countTime.setTextColor(ContextCompat.getColor(context, R.color.black))
+                countTime.setTextColor(ContextCompat.getColor(context, R.color.purple_200))
             } else {
                 countTime.setTextColor(ContextCompat.getColor(context, R.color.red))
             }
@@ -194,7 +194,7 @@ class MainListAdapter(
         }
         val parentView = holder.getView<LinearLayoutCompat>(R.id.ll_parent)
         if (item.isToday()) {//如果是今天
-            parentView.background = ContextCompat.getDrawable(context, R.color.gray_few)
+            parentView.setBackground(ContextCompat.getDrawable(context, R.color.gray_few))
             item.isTodayPosition = holder.adapterPosition
         } else {
             parentView.background = null
