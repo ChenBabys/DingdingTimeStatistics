@@ -12,15 +12,15 @@ android {
             keyPassword '123456'
         }
     }
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion versionConfig.compileSdkVersion
+    buildToolsVersion versionConfig.buildToolsVersion
 
     defaultConfig {
         applicationId "com.chenbabys.dingdingtimestatistics"
-        minSdkVersion 22
-        targetSdkVersion 30
-        versionCode 5
-        versionName "1.5.1"
+        minSdkVersion versionConfig.minSdkVersion
+        targetSdkVersion versionConfig.targetSdkVersion
+        versionCode versionConfig.versionCode
+        versionName versionConfig.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,8 +52,29 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    flavorDimensions "1.0.0"//保持和版本号一致
+    flavorDimensions "1.0.0"//保持和版本号一致,这里的优先级最高，包名id可以直接影响原来的
     productFlavors {
+        online{
+            applicationId "com.chenbabys.dingdingtimestatistics"
+            manifestPlaceholders = [app_name         : "@string/app_name", app_icon: "@mipmap/ic_launcher",
+//                                    JPUSH_PKGNAME: "com.jiuxiaoer.ctms",
+//                                    JPUSH_APPKEY : "d9282d7c5ac74fc3f75cbd37", //JPush 上注册的包名对应的 Appkey.
+//                                    JPUSH_CHANNEL: "default_developer" //暂时填写默认值即可.AllEquityActivity
+            ]
+//            buildConfigField "String", "SERVER_IP", "\"https://gateway.v2.jiuxiaoer.cn\""
+//            buildConfigField "String", "BASE_SECOND_URL", "\"/v2-app-ctms/\""//二级根
+        }
+
+        online{
+            applicationId "com.chenbabys.dingdingtimestatistics"
+            manifestPlaceholders = [app_name         : "打卡测试版", app_icon: "@mipmap/ic_launcher",
+//                                    JPUSH_PKGNAME: "com.jiuxiaoer.ctms",
+//                                    JPUSH_APPKEY : "d9282d7c5ac74fc3f75cbd37", //JPush 上注册的包名对应的 Appkey.
+//                                    JPUSH_CHANNEL: "default_developer" //暂时填写默认值即可.AllEquityActivity
+            ]
+//            buildConfigField "String", "SERVER_IP", "\"https://gateway.v2.jiuxiaoer.cn\""
+//            buildConfigField "String", "BASE_SECOND_URL", "\"/v2-app-ctms/\""//二级根
+        }
 
     }
 }

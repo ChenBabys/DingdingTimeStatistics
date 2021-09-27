@@ -194,7 +194,7 @@ class MainListAdapter(
         }
         val parentView = holder.getView<LinearLayoutCompat>(R.id.ll_parent)
         if (item.isToday()) {//如果是今天
-            parentView.setBackground(ContextCompat.getDrawable(context, R.color.gray_few))
+            parentView.background = ContextCompat.getDrawable(context, R.color.gray_few)
             item.isTodayPosition = holder.adapterPosition
         } else {
             parentView.background = null
