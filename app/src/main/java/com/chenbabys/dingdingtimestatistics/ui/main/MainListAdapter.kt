@@ -133,19 +133,25 @@ class MainListAdapter(
                 } else hour
             }
         } else {
-            item.dayWorkHour = 0.0f//没填满的时候赋值为0
+            item.dayWorkHour = CacheUtil.defaultFloat //没填满的时候赋值为0
         }
 
         item.dayWorkHour?.let {//大于或者等于10小时则显示主题色文字，否则是红色文字
-            if (it >= 10) {
-                countTime.setTextColor(ContextCompat.getColor(context, R.color.purple_200))
-            } else {
-                countTime.setTextColor(ContextCompat.getColor(context, R.color.red))
+            when {
+                it >= 10 -> {
+                    countTime.setTextColor(ContextCompat.getColor(context, R.color.purple_200))
+                }
+                it == CacheUtil.defaultFloat -> {
+                    countTime.setTextColor(ContextCompat.getColor(context, R.color.gray_deep))
+                }
+                else -> {
+                    countTime.setTextColor(ContextCompat.getColor(context, R.color.red))
+                }
             }
         } ?: let {
-            item.dayWorkHour = 0.0f//空的时候赋值为0
+            item.dayWorkHour = CacheUtil.defaultFloat //空的时候赋值为0
         }
-        if (item.vacation == null||item.vacation == CacheUtil.defaultFloat) {
+        if (item.vacation == null || item.vacation == CacheUtil.defaultFloat) {
             countTime.text = if (item.dayWorkHour == null) "0h" else item.dayWorkHour.toString() + "h"
         } else {
             when (item.dayWorkHour) {
@@ -169,11 +175,11 @@ class MainListAdapter(
             endTime.setPadding(0,0,0,0)
         }
         //一天的总工时
-        if (item.dayWorkHour == 0.0f) {
+        if (item.dayWorkHour == CacheUtil.defaultFloat) {
             countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
         } else {
             when (item.vacation) {
-                CacheUtil.defaultFloat->{
+                CacheUtil.defaultFloat ->{
                     countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)
                 }
