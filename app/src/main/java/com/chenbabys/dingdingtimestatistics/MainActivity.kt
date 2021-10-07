@@ -20,6 +20,7 @@ import com.chenbabys.dingdingtimestatistics.ui.viewmodel.MainVM
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
+import com.chenbabys.dingdingtimestatistics.util.MethodUnit
 import com.pgyer.pgyersdk.PgyerSDKManager
 import java.text.SimpleDateFormat
 import java.util.*
@@ -152,7 +153,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 totalHour += hour
             }
         }
-        binding.tvCountTotal.text = ("本月打卡统计时间为：${totalHour}小时")
+        binding.tvCountTotal.text = ("本月打卡统计时间为：${MethodUnit.formatNumberTwoDigits(totalHour)}小时")
         //统计完之后保存到本地cache
         CacheUtil.setDdtsCache(viewModel.dateList)
         //保存为当前本月总工时,到下月一号的在删除本月数据前去保存为上月总工时~

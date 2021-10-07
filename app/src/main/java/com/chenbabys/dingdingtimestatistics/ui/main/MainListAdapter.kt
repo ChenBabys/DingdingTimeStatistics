@@ -12,6 +12,9 @@ import com.chenbabys.dingdingtimestatistics.R
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
+import com.chenbabys.dingdingtimestatistics.util.MethodUnit
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 /**
  * 日历打卡表适配器
@@ -152,12 +155,12 @@ class MainListAdapter(
             item.dayWorkHour = CacheUtil.defaultFloat //空的时候赋值为0
         }
         if (item.vacation == null || item.vacation == CacheUtil.defaultFloat) {
-            countTime.text = if (item.dayWorkHour == null) "0h" else item.dayWorkHour.toString() + "h"
+            countTime.text = if (item.dayWorkHour == null) "0h" else MethodUnit.formatNumberTwoDigits(item.dayWorkHour) + "h"
         } else {
             when (item.dayWorkHour) {
                 null -> countTime.text = ("0h")
                 else -> {
-                    SpanUtils.with(countTime).append(item.dayWorkHour.toString() + "h")
+                    SpanUtils.with(countTime).append(MethodUnit.formatNumberTwoDigits(item.dayWorkHour) + "h")
                         .appendLine()
                         .append("（已减请假${item.vacation}h）")
                         .setFontSize(11, true)
