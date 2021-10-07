@@ -142,7 +142,7 @@ class MainListAdapter(
                     countTime.setTextColor(ContextCompat.getColor(context, R.color.purple_200))
                 }
                 it == CacheUtil.defaultFloat -> {
-                    countTime.setTextColor(ContextCompat.getColor(context, R.color.gray_deep))
+                    countTime.setTextColor(ContextCompat.getColor(context, R.color.gray_few_deep))
                 }
                 else -> {
                     countTime.setTextColor(ContextCompat.getColor(context, R.color.red))
