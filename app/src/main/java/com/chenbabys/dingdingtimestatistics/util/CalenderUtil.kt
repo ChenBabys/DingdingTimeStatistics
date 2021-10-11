@@ -147,17 +147,17 @@ object CalenderUtil {
     }
 
     /**
-     * 获取时间字符中的小时
+     * 获取时间字符中的小时和分钟，转化为float类型的小时，比如：1.75小时这种格式
      * //默认值给0.0f
      */
     fun getTimeFilterHour(time: String): Float {
         var timeHour: Float = 0.0f
         if (time.contains(".")) {
             val timeList = time.split(".")
-            timeHour = timeList[0].toFloat()
+            timeHour = timeList[0].toFloat() + (timeList[1].toFloat()/ 60)//时+分
         } else if (time.contains(":")) {
             val timeList = time.split(":")
-            timeHour = timeList[0].toFloat()
+            timeHour = timeList[0].toFloat() + (timeList[1].toFloat()/ 60)//时+分
         }
         return timeHour
     }
