@@ -117,23 +117,49 @@ class MainListAdapter(
                 ///todo 以后可以做适配方式，不必按照写死的9.上班来统计，下同
                 //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时,和请假时间（这里默认上班时间是9.）
                 //并且开始的时间是小于下午14点的
-                item.dayWorkHour = if (startHour<14 && hour>=5) {
-                   if (startHour > 12){
-                       ((hour - (14 - startHour)) - vacation)
-                   }else{
-                       ((hour - 2) - vacation)
-                   }
-                } else (hour - vacation)
+                item.dayWorkHour = when(endHour >= 21){
+                    true ->{
+                        if (startHour < 14 && hour >= 5) {
+                            if (startHour > 12){
+                                ((hour - (14 - startHour)) - vacation)-0.5f
+                            }else{
+                                ((hour - 2) - vacation)-0.5f
+                            }
+                        } else (hour - vacation)-0.5f
+                    }
+                    false ->{
+                        if (startHour<14 && hour>=5) {
+                            if (startHour > 12){
+                                ((hour - (14 - startHour)) - vacation)
+                            }else{
+                                ((hour - 2) - vacation)
+                            }
+                        } else (hour - vacation)
+                    }
+                }
             } ?: let {
                 //如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时（这里默认上班时间是9.）
                 //并且开始的时间是小于下午14点的
-                item.dayWorkHour = if (startHour<14 && hour >= 5) {
-                    if (startHour>12){
-                        hour - (14 - startHour)
-                    }else{
-                        hour - 2
+                item.dayWorkHour = when(endHour >= 21){
+                    true ->{
+                        if (startHour<14 && hour >= 5) {
+                            if (startHour > 12){
+                                (hour - (14 - startHour)) -0.5f
+                            }else{
+                                (hour - 2) -0.5f
+                            }
+                        } else hour -0.5f
                     }
-                } else hour
+                    false ->{
+                        if (startHour<14 && hour >= 5) {
+                            if (startHour > 12){
+                                hour - (14 - startHour)
+                            }else{
+                                hour - 2
+                            }
+                        } else hour
+                    }
+                }
             }
         } else {
             item.dayWorkHour = CacheUtil.defaultFloat //没填满的时候赋值为0
