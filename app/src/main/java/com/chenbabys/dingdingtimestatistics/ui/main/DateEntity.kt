@@ -1,6 +1,5 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
-import com.blankj.utilcode.util.LogUtils
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import java.text.SimpleDateFormat
 import java.util.*

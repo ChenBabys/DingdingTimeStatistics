@@ -23,8 +23,8 @@ abstract class BaseActivity<VM: BaseViewModel,VB: ViewBinding>() :AppCompatActiv
         super.onCreate(savedInstanceState)
         //透明状态栏，它也会把状态栏的原来高度删除掉，底下的布局会并上去
         BarUtils.transparentStatusBar(this)
-        //高亮状态栏
-        BarUtils.setStatusBarLightMode(this,true)
+        //高亮状态栏,不要高亮了，高亮是黑色的文字这里
+        //BarUtils.setStatusBarLightMode(this,true)
         //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
         val type =javaClass.genericSuperclass as ParameterizedType
         val clazz1 = type.actualTypeArguments[0] as Class<VM>

@@ -78,6 +78,11 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
             //给统计的文字加个点击时动画
             ClickUtils.applyPressedViewAlpha(tvCountTotal)
             ClickUtils.applyPressedViewScale(tvCountTotal)
+            titleBar.llFiltrate.setOnClickListener{
+                DialogUtils.showMoreDialog(mutableListOf("10月","9月"),titleBar.llFiltrate,listener = { text ->
+                    ToastUtils.showShort(text)
+                }, 0f, 5f)
+            }
         }
         //获取日历数据
         viewModel.getCalendarEntities()
@@ -89,13 +94,16 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
      * 同步系统时间展示
      */
     private fun initTime() {
-        val timeStr = format.format(Date(System.currentTimeMillis()))
+        val timeStrArray = format.format(Date(System.currentTimeMillis())).split(" ")//用空格切割时间。
         SpanUtils.with(binding.titleBar.tvTitle)
             .append(CalenderUtil.getWeekCurrent())
-            .setFontSize(16,true)
+            .setFontSize(24,true)
             .appendSpace(20)
-            .append(timeStr)
-            .setFontSize(22,true)
+            .append(timeStrArray[0])
+            .setFontSize(14,true)
+            .appendSpace(20)
+            .append(timeStrArray[1])
+            .setFontSize(21,true)
             .create()
         //延时1s从新赋值后又开始延时，周而复始
         Handler(mainLooper).postDelayed({
@@ -106,6 +114,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
 
     override fun initVm() {
         viewModel.dateListChange.observe(this, Observer {
+            setFiltrateTitle()
             adapter.setList(viewModel.dateList)
             if (viewModel.isNeedScroll2CurrentDatePosition) {
                 Handler(Looper.getMainLooper()).postDelayed({ scroll2TodayPos() }, 100)
@@ -125,6 +134,19 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 binding.tvLastMonthCountTotal.text = ("上月总工时：${CacheUtil.getLastMonthHours()}小时")
             }
         })
+    }
+
+    /**
+     * 设置筛选的月份标题
+     */
+    private fun setFiltrateTitle(){
+        SpanUtils.with(binding.titleBar.tvFiltrate)
+            .append("${viewModel.dateList[0].month}")
+            .setFontSize(25,true)
+            .appendSpace(10)
+            .append("月")
+            .setFontSize(16,true)
+            .create()
     }
 
     /**
