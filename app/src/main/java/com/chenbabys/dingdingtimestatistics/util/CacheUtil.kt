@@ -15,15 +15,17 @@ object CacheUtil {
     private val cache = MMKV.mmkvWithID("calender_data")//初始化
     const val defaultFloat: Float = 0.0f
 
-    fun setDdtsCache(dateEntity: MutableList<DateEntity>) =
-        cache.encode("calender_cache", GsonUtils.toJson(dateEntity))
+    /**
+     * 根据月份保存日历（以前是只保存当前月份的，现在改成按传入的月份存和取）
+     */
+    fun setDdtsCache(month: Int, dateEntity: MutableList<DateEntity>) =
+        cache.encode("calender_cache_$month", GsonUtils.toJson(dateEntity))
 
-    fun getDdtsCache(): MutableList<DateEntity> {
+    fun getDdtsCache(month:Int): MutableList<DateEntity> {
         var records = mutableListOf<DateEntity>()
-        val cacheDatesString = cache.decodeString("calender_cache", "")
+        val cacheDatesString = cache.decodeString("calender_cache_$month", "")
         try {
-            records =
-                GsonUtils.fromJson(cacheDatesString, GsonUtils.getListType(DateEntity::class.java))
+            records = GsonUtils.fromJson(cacheDatesString, GsonUtils.getListType(DateEntity::class.java))
         } catch (e: Exception) {
             e.printStackTrace()
             LogUtils.e("出错了", e)
@@ -31,34 +33,10 @@ object CacheUtil {
         return records
     }
 
-    fun removeDdtsCache() = cache.removeValueForKey("calender_cache")
-
     /**
-     * 设置保存上个月总工时
+     * 删除指定月份的数据
      */
-    fun setLastMonthHours(hours: Float) {
-        cache.encode("calender_last_month_hours", hours)
-    }
-
-    fun getLastMonthHours(): Float = cache.decodeFloat("calender_last_month_hours", defaultFloat)
-
-    fun removeLastMonthHours() = cache.removeValueForKey("calender_last_month_hours")
-
-    /**
-     * 设置保存这个月总工时
-     */
-    fun setThisMonthHours(hours: Float) {
-        cache.encode("calender_this_month_hours", hours)
-    }
-
-    /**
-     *获取
-     */
-    fun getCurrentSaveMonthHours(): Float =
-        cache.decodeFloat("calender_this_month_hours", defaultFloat)
-
-    fun removeCurrentSaveMonthHours() = cache.removeValueForKey("calender_this_month_hours")
-
+    fun removeDdtsCache(month: Int) = cache.removeValueForKey("calender_cache_$month")
 
 
     /**
@@ -72,5 +50,25 @@ object CacheUtil {
 
     fun removeMonth() = cache.removeValueForKey("calender_month")
 
+
+    /**
+     * 获取旧版本的当前月数据，这个方法只为了吧旧的key的数据转换到当前月份
+     * 这个方法在以后适配完旧用户之后完全可以删除掉。
+     */
+    fun getOldDdtsCache(): MutableList<DateEntity> {
+        var records = mutableListOf<DateEntity>()
+        val cacheDatesString = cache.decodeString("calender_cache", "")
+        try {
+            records = GsonUtils.fromJson(cacheDatesString, GsonUtils.getListType(DateEntity::class.java))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            LogUtils.e("旧数据获取出错了，可能不存在", e)
+        }
+        return records
+    }
+    /**
+     * 删除旧key当月份的数据
+     */
+    fun removeOldDdtsCache() = cache.removeValueForKey("calender_cache")
 
 }

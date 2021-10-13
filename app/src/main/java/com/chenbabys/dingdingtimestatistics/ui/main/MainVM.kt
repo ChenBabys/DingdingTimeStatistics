@@ -1,10 +1,8 @@
-package com.chenbabys.dingdingtimestatistics.ui.viewmodel
+package com.chenbabys.dingdingtimestatistics.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
-import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import java.util.*
@@ -16,30 +14,46 @@ import java.util.*
 class MainVM : BaseViewModel() {
     val dateListChange = MutableLiveData<Boolean>()
     var dateList = mutableListOf<DateEntity>()
-    val lastMonthChange = MutableLiveData<Boolean>()
     var isNeedScroll2CurrentDatePosition = true//默认每次打开程序是需要
+    //当前tab选中的月份
+    var mCurrentShowDataMonth = CalenderUtil.getThisMonth()//默认给当前月份
 
 
     /**
      * 获取日历
      */
     fun getCalendarEntities() {
-        dateList = if (CalenderUtil.getThisMonth() != CacheUtil.getMonth()) {//如果月份不同了就更新
-            CacheUtil.setMonth(CalenderUtil.getThisMonth())//同步当前月
-            val justNowLastMonthHours = CacheUtil.getCurrentSaveMonthHours()
-            CacheUtil.setLastMonthHours(justNowLastMonthHours)
-            CacheUtil.removeDdtsCache()//清除掉所有的旧数据
+        val thisMonth = CalenderUtil.getThisMonth()//当前月
+        dateList = if (thisMonth != CacheUtil.getMonth()) {//如果月份不同了就更新
+            CacheUtil.setMonth(thisMonth)//同步当前月
+            //清除掉上上上个月的旧数据，只保留三个月（当前月和上月以及上上月）
+            CacheUtil.removeDdtsCache(thisMonth.minus(3))
             CalenderUtil.getDateEntities()
         } else {
-            if (CacheUtil.getDdtsCache().isNullOrEmpty()) {//如果是空的则还是填充获取日历的，否则才给缓存的
+            //如果是空的则还是填充获取日历的，否则才给缓存的
+            if (CacheUtil.getDdtsCache(thisMonth).isNullOrEmpty()) {
+                //默认是当前系统时间的所在月份日历数据
                 CalenderUtil.getDateEntities()
             } else {
-                CacheUtil.getDdtsCache()
+                CacheUtil.getDdtsCache(thisMonth)
             }
         }
-        lastMonthChange.value = true//通知刷新上个月时间，如果不空则会显示
         dateListChange.value = true
     }
+
+    /**
+     * 选择相应月份的数据，并刷新数据
+     */
+    fun chooseMonthEntities(month: Int){
+        LogUtils.d("查看","$month")
+        LogUtils.d("查看",CacheUtil.getDdtsCache(month))
+        LogUtils.d("查看旧数据",CacheUtil.getOldDdtsCache())
+
+        dateList.clear()
+        dateList.addAll(CacheUtil.getDdtsCache(month))
+        dateListChange.value = true
+    }
+
 
     /**
      * 获取上次选择的日期

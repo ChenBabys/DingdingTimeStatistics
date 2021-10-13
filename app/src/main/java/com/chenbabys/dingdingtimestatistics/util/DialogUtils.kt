@@ -81,12 +81,12 @@ object DialogUtils {
     }
 
     /**
-     * 显示更多pop
+     * 显示更多选择的pop
      */
-    fun showMoreDialog(
+    fun showMoreChooseDialog(
         tabValues: MutableList<String>,
         view: View,
-        listener: (text: String) -> Unit,
+        listener: (position:Int, text: String) -> Unit,
         offsetXdp: Float = -5f,//预设默认x偏移值
         offsetYdp: Float = -10f//预设默认y偏移值
     ): DialogLayer {
@@ -117,13 +117,13 @@ object DialogUtils {
             .cancelableOnTouchOutside(true)
             .cancelableOnClickKeyBack(true)
         container.removeAllViews()//清除所有view
-        tabValues.forEach { itemName ->
+        for (index in 0 until tabValues.size){
             val childView =
                 DialogValueTipsChildBinding.inflate(LayoutInflater.from(ActivityHolder.getCurrentActivity()))
-            childView.content.text = itemName
+            childView.content.text = tabValues[index]
             container.addView(childView.root)
             childView.root.setOnClickListener {
-                listener.invoke(childView.content.text.toString())
+                listener.invoke(index,childView.content.text.toString())
                 dialogLayer.dismiss()
             }
         }
