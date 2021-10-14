@@ -34,40 +34,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         //textView当前点击的textview,item,当前项的相关数据和字段，position当前下标，isStartTime当前是否是选择的是添加上班时间
         //isModifyTotal:是否是修改工时
         MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
-            if (isModifyTotal) {//是添加请假的操作
-                // 这里直接拿的数组的，没有使用上面的item,不止为何用item的话导致一些无数据的项会有一个错乱的问题，也会有显示dayWorkHour不空或者不为0.0f
-                val currentItem = viewModel.dateList[position]//仅用于下面的判断。填充时候不用他，因为只有它不会影响到无数据的项。
-                if (currentItem.dayWorkHour != CacheUtil.defaultFloat && currentItem.dayWorkHour != null) {
-                    DialogUtils.showMoreChooseDialog(
-                        mutableListOf(if (item.vacation == null || item.vacation
-                            == CacheUtil.defaultFloat) "添加请假时间" else "修改请假时间","标记休息日加班"),
-                        textView, listener = { pos,text->
-                            when(pos){
-                                0-> {
-                                    DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
-                                        if (it <= item.dayWorkHour!!) {
-                                            item.vacation = it
-                                            viewModel.dateListChange.value = true
-                                        } else {
-                                            ToastUtils.showShort("请假时间不能超过今天总工时~")
-                                        }
-                                    }, onShowOrHideListener = { show ->
-                                        if (!show) {
-                                            KeyboardUtils.hideSoftInput(this)
-                                        }
-                                    })
-                                }
-                                1-> {
-                                    item.isRestWorking = true
-                                    viewModel.dateListChange.value = true
-                                }
-                            }
-                        }, -32f, -15f
-                    )
-                }
-            } else {//普通的其他操作
-                showTimePicker(item, isStartTime, position)
-            }
+            onItemViewClickListener(textView,item,position,isStartTime,isModifyTotal)
         }, onTextRemoveListener = {
             viewModel.dateListChange.value = true
         })
@@ -77,10 +44,10 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         //下面这段代码只有第一次打开新版本的时候有作用(属于一个适配旧数据的代码，于主流程没有关系，
         // 如果不需要适配旧key数据,或者说不需要保留当前月之前选择过的数据则可以直接不要)
         //-----------------开始-----------------------///
-        if (CacheUtil.getOldDdtsCache().isNotEmpty()){
+        if (CacheUtil.getOldDdtsCache().isNotEmpty()) {
             val thisMonth = CalenderUtil.getThisMonth()
             //把当前月的旧数据存到新数据key中
-            CacheUtil.setDdtsCache(thisMonth,CacheUtil.getOldDdtsCache())
+            CacheUtil.setDdtsCache(thisMonth, CacheUtil.getOldDdtsCache())
             CacheUtil.removeOldDdtsCache()//删除掉OldDdtsCache的数据，从此不会再起作用
         }
         //-----------------结束-----------------------///
@@ -96,13 +63,13 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
             ClickUtils.applyPressedViewScale(tvCountTotal)
             setFiltrateTitle(CalenderUtil.getThisMonth())//填充当前月为筛选标题
             //顶部的月份筛选点击事件
-            titleBar.llFiltrate.setOnClickListener{
+            titleBar.llFiltrate.setOnClickListener {
                 val thisMonth = CalenderUtil.getThisMonth()
                 val lastMonth = CalenderUtil.getThisMonth().minus(1)//减去1
                 val lastInLastMonth = CalenderUtil.getThisMonth().minus(2)//减去2
                 DialogUtils.showMoreChooseDialog(
-                    mutableListOf("${lastInLastMonth}月工时", "${lastMonth}月工时","${thisMonth}月工时"),
-                    titleBar.llFiltrate,listener = { pos,text ->
+                    mutableListOf("${lastInLastMonth}月工时", "${lastMonth}月工时", "${thisMonth}月工时"),
+                    titleBar.llFiltrate, listener = { pos, text ->
                         val monthInStrs = text.split("月")
                         val month = monthInStrs[0].toInt()
                         //临时保存当前选中的月份备用。
@@ -111,7 +78,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                         viewModel.chooseMonthEntities(month)
                         //设置筛选标题
                         setFiltrateTitle(month)
-                }, 30f, -6f)
+                    }, 30f, -6f
+                )
             }
         }
         //获取日历数据
@@ -127,18 +95,18 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         val timeStrArray = format.format(Date(System.currentTimeMillis())).split(" ")//用空格切割时间。
         SpanUtils.with(binding.titleBar.tvTitle)
             .append(CalenderUtil.getWeekCurrent())
-            .setFontSize(24,true)
+            .setFontSize(24, true)
             .appendSpace(20)
             .append(timeStrArray[0])
-            .setFontSize(14,true)
+            .setFontSize(14, true)
             .appendSpace(20)
             .append(timeStrArray[1])
-            .setFontSize(21,true)
+            .setFontSize(21, true)
             .create()
         //延时1s从新赋值后又开始延时，周而复始
         Handler(mainLooper).postDelayed({
             initTime()
-        },1000)
+        }, 1000)
     }
 
 
@@ -146,7 +114,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         viewModel.dateListChange.observe(this, Observer {
             adapter.setList(viewModel.dateList)
             if (adapter.hasEmptyView()) adapter.removeEmptyView()
-            if (viewModel.dateList.isEmpty()){
+            if (viewModel.dateList.isEmpty()) {
                 adapter.setEmptyView(R.layout.layout_empty_no_data)
             }
             if (viewModel.isNeedScroll2CurrentDatePosition) {
@@ -163,15 +131,73 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     /**
      * 设置筛选的月份标题
      */
-    private fun setFiltrateTitle(month:Int?){
+    private fun setFiltrateTitle(month: Int?) {
         SpanUtils.with(binding.titleBar.tvFiltrate)
             .append("$month")
-            .setFontSize(25,true)
+            .setFontSize(25, true)
             .appendSpace(10)
             .append("月")
-            .setFontSize(16,true)
+            .setFontSize(16, true)
             .create()
     }
+
+    /**
+     * 子项视图点击事件
+     */
+    private fun onItemViewClickListener(
+        textView: TextView,
+        item: DateEntity,
+        position: Int,
+        isStartTime: Boolean,
+        isModifyTotal: Boolean
+    ) {
+        if (isModifyTotal) {//是添加请假的操作
+            // 这里直接拿的数组的，没有使用上面的item,不止为何用item的话导致一些无数据的项会有一个错乱的问题，也会有显示dayWorkHour不空或者不为0.0f
+            val currentItem = viewModel.dateList[position]//仅用于下面的判断。填充时候不用他，因为只有它不会影响到无数据的项。
+            if (currentItem.dayWorkHour != CacheUtil.defaultFloat && currentItem.dayWorkHour != null) {
+                DialogUtils.showMoreChooseDialog(
+                    mutableListOf(
+                        if (item.vacation == null || item.vacation
+                            == CacheUtil.defaultFloat
+                        ) "添加请假时间" else "修改请假时间", if (item.isRestWorking) "取消休息日加班" else "标记休息日加班"
+                    ),
+                    textView, listener = { pos, text ->
+                        when (pos) {
+                            0 -> {
+                                DialogUtils.showInputHourDialog(mContext, onConfirmClick = {
+                                    if (it <= item.dayWorkHour!!) {
+                                        item.vacation = it
+                                        viewModel.dateListChange.value = true
+                                    } else {
+                                        ToastUtils.showShort("请假时间不能超过今天总工时~")
+                                    }
+                                }, onShowOrHideListener = { show ->
+                                    if (!show) {
+                                        KeyboardUtils.hideSoftInput(this)
+                                    }
+                                })
+                            }
+                            1 -> {
+                                Handler(mainLooper).postDelayed({//延时，避免弹框很突兀。
+                                    item.isRestWorking = !item.isRestWorking
+                                    if (item.vacation != null && item.vacation != CacheUtil.defaultFloat) {
+                                        //如果头上的代码设置成了当前是休息日则清零请假时间。
+                                        if (item.isRestWorking) {
+                                            item.vacation = CacheUtil.defaultFloat
+                                        }
+                                    }
+                                    viewModel.dateListChange.value = true
+                                }, 300)
+                            }
+                        }
+                    }, -32f, -15f
+                )
+            }
+        } else {//普通的其他操作
+            showTimePicker(item, isStartTime, position)
+        }
+    }
+
 
     /**
      * 跳转到“今天”的下标
@@ -180,10 +206,13 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         adapter.data.forEach { data -> //遍历查找当前日期所在的下标,而后跳转到指定下标
             data.isTodayPosition?.let { pos ->
                 if (pos + 1 == data.day) {
-                        //这种方式是最准确的，并且微信的根据字母跳转也是用这种方式
-                        //第一个参数是跳转到指定下标，第二个是偏移多少像素
+                    //这种方式是最准确的，并且微信的根据字母跳转也是用这种方式
+                    //第一个参数是跳转到指定下标，第二个是偏移多少像素
                     (binding.rvContent.layoutManager as LinearLayoutManager)
-                        .scrollToPositionWithOffset(pos,(ScreenUtils.getScreenHeight() * 0.4).toInt())
+                        .scrollToPositionWithOffset(
+                            pos,
+                            (ScreenUtils.getScreenHeight() * 0.4).toInt()
+                        )
                 }
             }
         }
@@ -200,27 +229,28 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         viewModel.dateList.forEach {
             it.dayWorkHour?.let { hour ->
                 totalHour += hour
-                overTime +=
-//                    if (it.isWeekEnd()) hour else {
-                    if (hour > 7) hour -7 else 0f
-//                }
+                overTime += if (it.isRestWorking) hour else {
+                    if (hour > 7) hour - 7 else 0f
+                }
             }
         }
         binding.tvCountTotal.text = ("本月打卡统计时间为：${MethodUnit.formatNumberTwoDigits(totalHour)}小时")
-        if (overTime == CacheUtil.defaultFloat){
-            binding.tvLastMonthCountTotal.visibility  = View.GONE
-        }else{
-            binding.tvLastMonthCountTotal.text = ("本月加班时长：${MethodUnit.formatNumberTwoDigits(overTime)}小时")
-            binding.tvLastMonthCountTotal.visibility  = View.VISIBLE
+        if (overTime == CacheUtil.defaultFloat) {
+            binding.tvLastMonthCountTotal.visibility = View.GONE
+        } else {
+            binding.tvLastMonthCountTotal.text =
+                ("本月加班时长：${MethodUnit.formatNumberTwoDigits(overTime)}小时")
+            binding.tvLastMonthCountTotal.visibility = View.VISIBLE
         }
         //统计完之后根据当前tab选择的月份保存相关数据到本地cache
-        CacheUtil.setDdtsCache(viewModel.mCurrentShowDataMonth,viewModel.dateList)
+        CacheUtil.setDdtsCache(viewModel.mCurrentShowDataMonth, viewModel.dateList)
     }
 
     private var pvTime: TimePickerView? = null
 
     @SuppressLint("SimpleDateFormat")
     private val formatTime = SimpleDateFormat("HH:mm")
+
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss")
 

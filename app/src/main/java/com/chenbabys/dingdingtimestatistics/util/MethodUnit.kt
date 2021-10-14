@@ -30,18 +30,40 @@ object MethodUnit {
      * 14：下午两点
      * 12：中午12点
      * isOverSixPmHour：是否是超过下午6点后并且21.5之前的时间。是的话就减掉并返回，不是就返回原值
+     * isRestWorking:是否是休息日整日的加班，休息日加班则不需要遵循超过晚上六点不到晚上9.30不算的原则。
+     *
      *
      * 要是以后吃晚饭时间不再扣掉以及晚上不再固定要到9.30才算加班的时候，去掉dinnerTime和isOverSixPmHour（用hour替代回去）即可。
      */
-    fun mathCalTimeCount(startHour: Float, endHour: Float, hour: Float, vacation: Float = 0f): Float {
-        val dinnerTime = if (endHour >= 21.5) 0.5f else 0f
-        val isOverSixPmHour = if (endHour > 18 && endHour < 21.5) hour-(endHour-18) else hour
+    fun mathCalTimeCount(
+        startHour: Float,
+        endHour: Float,
+        hour: Float,
+        vacation: Float = 0f,
+        isRestWorking: Boolean,
+        isWeeHours: Boolean
+    ): Float {
+        val dinnerTime = if (endHour >= 21.5 && !isRestWorking) 0.5f else 0f
+        val isOverSixPmHour =
+            if ((endHour > 18 && endHour < 21.5) && !isRestWorking) hour - (endHour - 18) else hour
         return when {
             startHour < 14 -> {
                 if (startHour > 12) {
                     ((isOverSixPmHour - (14 - startHour)) - vacation) - dinnerTime
                 } else {
-                    ((isOverSixPmHour - 2) - vacation) - dinnerTime
+                    when {
+                        endHour > 12 && endHour < 14 -> {
+                            ((isOverSixPmHour - (endHour - 12)) - vacation) - dinnerTime
+                        }
+                        endHour >= 14 -> {
+                            ((isOverSixPmHour - 2) - vacation) - dinnerTime//2是中午吃饭睡觉的两小时
+                        }
+                        else -> { //属于endHour<=12范畴
+                            if (isWeeHours) {//如果是凌晨下班也是endHour<=12范畴，但是它却得减去中午休息吃饭时间2小时
+                                ((isOverSixPmHour - 2) - vacation) - dinnerTime
+                            } else (isOverSixPmHour - vacation) - dinnerTime
+                        }
+                    }
                 }
             }
             else -> (isOverSixPmHour - vacation) - dinnerTime

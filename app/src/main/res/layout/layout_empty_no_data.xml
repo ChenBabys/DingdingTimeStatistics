@@ -8,11 +8,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_4"
         android:gravity="center"
         android:text="当前月份啥都没有！！"
         android:textColor="@color/lite_blue"
         android:textSize="16sp"
-        app:drawableTopCompat="@drawable/ic_empty" />
+        app:drawableTopCompat="@drawable/ic_no_data" />
 
 </FrameLayout>

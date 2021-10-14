@@ -195,51 +195,51 @@ object DialogUtils {
     }
 
 
-    /**
-     * 显示确定单双休的弹框，本程序安装后只会执行一次~
-     * //weekRestType:每周的休息方式，1单休，2双休
-     */
-    fun showConfirmSingleWeekOrDialog(
-        context: Context, onConfirmClick: (weekRestType: Int) -> Unit,
-        onShowOrHideListener: ((isShow: Boolean) -> Unit)? = null//可空
-    ): DialogLayer {
-        val binding =
-            DialogViewSettingWeekSingleOrDoubleRestBinding.inflate(LayoutInflater.from(context))
-        val dialog = AnyLayer.dialog(context)
-            .contentView(binding.root)
-            .backgroundDimDefault()
-            .compatSoftInput(true)//适应输入弹框上移
-            .gravity(Gravity.CENTER)
-            .doOnShow {
-                onShowOrHideListener?.invoke(true)
-            }
-            .doOnDismiss {
-                onShowOrHideListener?.invoke(false)
-            }
-            .contentAnimator(object : Layer.AnimatorCreator {
-                override fun createInAnimator(target: View): Animator {
-                    return AnimatorHelper.createDelayedZoomInAnim(binding.root)
-                }
-
-                override fun createOutAnimator(target: View): Animator {
-                    return AnimatorHelper.createDelayedZoomOutAnim(binding.root)
-                }
-
-            }).cancelableOnTouchOutside(false).cancelableOnClickKeyBack(false)
-        dialog.show()
-
-        binding.tvConfirm.setOnClickListener {
-            val checkType = if (binding.gpGroup.checkedRadioButtonId == R.id.rb_single) 1 else 2
-            onConfirmClick.invoke(checkType)
-            dialog.dismiss()
-            KeyboardUtils.hideSoftInput(it)
-        }
-        //不加这段布局就扭曲~
-        val layoutParams = dialog.contentView!!.layoutParams
-        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        layoutParams.width = (ScreenUtils.getAppScreenWidth() * 0.8).toInt()
-        return dialog
-    }
+//    /**
+//     * 显示确定单双休的弹框，本程序安装后只会执行一次~
+//     * //weekRestType:每周的休息方式，1单休，2双休 (不做了)
+//     */
+//    fun showConfirmSingleWeekOrDialog(
+//        context: Context, onConfirmClick: (weekRestType: Int) -> Unit,
+//        onShowOrHideListener: ((isShow: Boolean) -> Unit)? = null//可空
+//    ): DialogLayer {
+//        val binding =
+//            DialogViewSettingWeekSingleOrDoubleRestBinding.inflate(LayoutInflater.from(context))
+//        val dialog = AnyLayer.dialog(context)
+//            .contentView(binding.root)
+//            .backgroundDimDefault()
+//            .compatSoftInput(true)//适应输入弹框上移
+//            .gravity(Gravity.CENTER)
+//            .doOnShow {
+//                onShowOrHideListener?.invoke(true)
+//            }
+//            .doOnDismiss {
+//                onShowOrHideListener?.invoke(false)
+//            }
+//            .contentAnimator(object : Layer.AnimatorCreator {
+//                override fun createInAnimator(target: View): Animator {
+//                    return AnimatorHelper.createDelayedZoomInAnim(binding.root)
+//                }
+//
+//                override fun createOutAnimator(target: View): Animator {
+//                    return AnimatorHelper.createDelayedZoomOutAnim(binding.root)
+//                }
+//
+//            }).cancelableOnTouchOutside(false).cancelableOnClickKeyBack(false)
+//        dialog.show()
+//
+//        binding.tvConfirm.setOnClickListener {
+//            val checkType = if (binding.gpGroup.checkedRadioButtonId == R.id.rb_single) 1 else 2
+//            onConfirmClick.invoke(checkType)
+//            dialog.dismiss()
+//            KeyboardUtils.hideSoftInput(it)
+//        }
+//        //不加这段布局就扭曲~
+//        val layoutParams = dialog.contentView!!.layoutParams
+//        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+//        layoutParams.width = (ScreenUtils.getAppScreenWidth() * 0.8).toInt()
+//        return dialog
+//    }
 
 
 }

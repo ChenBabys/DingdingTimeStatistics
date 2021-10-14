@@ -116,7 +116,7 @@ class MainListAdapter(
             ////如果超过了上午加上中午到下午两点前的五个小时的上班时间，则减去中午休息的两个小时,和请假时间（这里默认上班时间是9.）
             ///并且开始的时间是小于下午14点的
             item.dayWorkHour = MethodUnit.mathCalTimeCount(startHour, endHour, hour,
-                item.vacation?:CacheUtil.defaultFloat)
+                item.vacation?:CacheUtil.defaultFloat,item.isRestWorking,item.isWeeHours)
         } else {
             item.dayWorkHour = CacheUtil.defaultFloat //没填满的时候赋值为0
         }
@@ -163,19 +163,22 @@ class MainListAdapter(
         if (item.dayWorkHour == CacheUtil.defaultFloat) {
             countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
         } else {
-            when (item.vacation) {
-                CacheUtil.defaultFloat ->{
-                    countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)
-                }
-                null -> {
-                    countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)
-                }
-                else -> {
-                    countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        ContextCompat.getDrawable(context, R.drawable.ic_vacation), null, null, null)
-                }
+            //休息日加班
+            when(item.isRestWorking){
+               true->{
+                   countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                       ContextCompat.getDrawable(context, R.drawable.ic_overtime), null, null, null)
+               }
+               false->{
+                   //请假时间
+                   if (item.vacation==null || item.vacation==CacheUtil.defaultFloat){
+                       countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                           ContextCompat.getDrawable(context, R.drawable.ic_modify), null, null, null)
+                   } else {
+                       countTime.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                           ContextCompat.getDrawable(context, R.drawable.ic_vacation), null, null, null)
+                   }
+               }
             }
             //左边图标的点击事件
             countTime.setOnClickListener {
