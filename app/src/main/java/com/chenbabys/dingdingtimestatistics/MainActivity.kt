@@ -34,7 +34,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         //textView当前点击的textview,item,当前项的相关数据和字段，position当前下标，isStartTime当前是否是选择的是添加上班时间
         //isModifyTotal:是否是修改工时
         MainListAdapter(onTextViewClickListener = { textView, item, position, isStartTime, isModifyTotal ->
-            onItemViewClickListener(textView,item,position,isStartTime,isModifyTotal)
+            onItemViewClickListener(textView, item, position, isStartTime, isModifyTotal)
         }, onTextRemoveListener = {
             viewModel.dateListChange.value = true
         })
@@ -70,6 +70,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 DialogUtils.showMoreChooseDialog(
                     mutableListOf("${lastInLastMonth}月工时", "${lastMonth}月工时", "${thisMonth}月工时"),
                     titleBar.llFiltrate, listener = { pos, text ->
+                        //拆分月份信息
                         val monthInStrs = text.split("月")
                         val month = monthInStrs[0].toInt()
                         //临时保存当前选中的月份备用。
@@ -209,10 +210,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                     //这种方式是最准确的，并且微信的根据字母跳转也是用这种方式
                     //第一个参数是跳转到指定下标，第二个是偏移多少像素
                     (binding.rvContent.layoutManager as LinearLayoutManager)
-                        .scrollToPositionWithOffset(
-                            pos,
-                            (ScreenUtils.getScreenHeight() * 0.4).toInt()
-                        )
+                        .scrollToPositionWithOffset(pos,
+                            (ScreenUtils.getScreenHeight() * 0.4).toInt())
                 }
             }
         }
@@ -234,12 +233,14 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 }
             }
         }
-        binding.tvCountTotal.text = ("本月打卡统计时间为：${MethodUnit.formatNumberTwoDigits(totalHour)}小时")
+        binding.tvCountTotal.text = ("${viewModel.mCurrentShowDataMonth}月打卡统计时间为：" +
+                "${MethodUnit.formatNumberTwoDigits(totalHour)}小时")
         if (overTime == CacheUtil.defaultFloat) {
             binding.tvLastMonthCountTotal.visibility = View.GONE
         } else {
             binding.tvLastMonthCountTotal.text =
-                ("本月加班时长：${MethodUnit.formatNumberTwoDigits(overTime)}小时")
+                ("${viewModel.mCurrentShowDataMonth}月加班时长：" +
+                        "${MethodUnit.formatNumberTwoDigits(overTime)}小时")
             binding.tvLastMonthCountTotal.visibility = View.VISIBLE
         }
         //统计完之后根据当前tab选择的月份保存相关数据到本地cache
@@ -291,6 +292,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
         }.setType(booleanArrayOf(false, false, false, true, true, false)) // 默认全部显示
             .setContentTextSize(20)
             .setItemVisibleCount(5)
+            .isCyclic(true)//循环模式
             .setDate(lastChooseCalendar)//设置上次时间
             .setLabel("年", "月", "日", "时", "分", "秒")
             .setLineSpacingMultiplier(2.0f)
