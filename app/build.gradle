@@ -24,10 +24,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+//     开启不了混淆和移除资源功能，因为很多第三方库导入时没填入混淆规则，懒得去改了
     buildTypes {
         release {
+            //启用支持代码收缩、混淆和优化
             minifyEnabled false
+            //启用资源收缩,移除多余资源
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -35,7 +38,10 @@ android {
             //将debug版本的包名设置为<app package>.debug以便能够同时在一台设备上安装debug和release版本的apk
 //            applicationIdSuffix ".debug"
 //            manifestPlaceholders = [ISDEBUG: "true"]
+            //启用支持代码收缩、混淆和优化
             minifyEnabled false
+            //启用资源收缩,移除多余资源
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
