@@ -28,9 +28,9 @@ android {
     buildTypes {
         release {
             //启用支持代码收缩、混淆和优化
-            minifyEnabled false
+            minifyEnabled true
             //启用资源收缩,移除多余资源
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -39,9 +39,9 @@ android {
 //            applicationIdSuffix ".debug"
 //            manifestPlaceholders = [ISDEBUG: "true"]
             //启用支持代码收缩、混淆和优化
-            minifyEnabled false
+            minifyEnabled true
             //启用资源收缩,移除多余资源
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -64,24 +64,24 @@ android {
             applicationId "com.chenbabys.dingdingtimestatistics"
             //记得设置清单文件中App处android:label="${app_name}"
             manifestPlaceholders = [app_name: "@string/app_name", app_icon: "@mipmap/ic_launcher",
-//                                    JPUSH_PKGNAME: "com.jiuxiaoer.ctms",
-//                                    JPUSH_APPKEY : "d9282d7c5ac74fc3f75cbd37", //JPush 上注册的包名对应的 Appkey.
+//                                    JPUSH_PKGNAME: "com.chenbabys.dingdingtimestatistics",
+//                                    JPUSH_APPKEY : "d9XXXXXXXc5aXXXXf75cbd37", //JPush 上注册的包名对应的 Appkey.
 //                                    JPUSH_CHANNEL: "default_developer" //暂时填写默认值即可.AllEquityActivity
             ]
-//            buildConfigField "String", "SERVER_IP", "\"https://gateway.v2.jiuxiaoer.cn\""
-//            buildConfigField "String", "BASE_SECOND_URL", "\"/v2-app-ctms/\""//二级根
+//            buildConfigField "String", "SERVER_IP", "\"https://XXXX.XX.XXXX.cn\""
+//            buildConfigField "String", "BASE_SECOND_URL", "\"/vX-app-XXXXX/\""//二级根
         }
 
         dev {
             applicationId "com.chenbabys.dingdingtimestatistics.dev"
             //记得设置清单文件中App处android:label="${app_name}"
             manifestPlaceholders = [app_name: "打卡dev版", app_icon: "@mipmap/ic_launcher",
-//                                    JPUSH_PKGNAME: "com.jiuxiaoer.ctms",
-//                                    JPUSH_APPKEY : "d9282d7c5ac74fc3f75cbd37", //JPush 上注册的包名对应的 Appkey.
+//                                    JPUSH_PKGNAME: "com.chenbabys.dingdingtimestatistics",
+//                                    JPUSH_APPKEY : "d92XXXXXXXcXXXXX5cbd37", //JPush 上注册的包名对应的 Appkey.
 //                                    JPUSH_CHANNEL: "default_developer" //暂时填写默认值即可.AllEquityActivity
             ]
-//            buildConfigField "String", "SERVER_IP", "\"https://gateway.v2.jiuxiaoer.cn\""
-//            buildConfigField "String", "BASE_SECOND_URL", "\"/v2-app-ctms/\""//二级根
+//            buildConfigField "String", "SERVER_IP", "\"https://XXXX.XX.XXXX.cn\""
+//            buildConfigField "String", "BASE_SECOND_URL", "\"/vX-app-XXXX/\""//二级根
         }
 
     }

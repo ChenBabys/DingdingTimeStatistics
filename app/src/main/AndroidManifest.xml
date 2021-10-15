@@ -27,8 +27,10 @@
         android:theme="@style/Theme.DingdingTimeStatistics"
         tools:targetApi="n"
         tools:ignore="AllowBackup">
+<!--        //纵向定向portrait-->
         <activity
             android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/spanTheme"
             android:exported="true" >
             <intent-filter>
@@ -37,7 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+<!--        //纵向定向portrait-->
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" >
         </activity> <!-- 今日头条屏幕适配 -->
         <meta-data
             android:name="design_width_in_dp"
