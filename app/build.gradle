@@ -24,7 +24,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-//     开启不了混淆和移除资源功能，因为很多第三方库导入时没填入混淆规则，懒得去改了
+
     buildTypes {
         release {
             //启用支持代码收缩、混淆和优化
