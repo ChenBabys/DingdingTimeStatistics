@@ -45,10 +45,6 @@ class MainVM : BaseViewModel() {
      * 选择相应月份的数据，并刷新数据
      */
     fun chooseMonthEntities(month: Int){
-        LogUtils.d("查看","$month")
-        LogUtils.d("查看",CacheUtil.getDdtsCache(month))
-        LogUtils.d("查看旧数据",CacheUtil.getOldDdtsCache())
-
         dateList.clear()
         dateList.addAll(CacheUtil.getDdtsCache(month))
         dateListChange.value = true
