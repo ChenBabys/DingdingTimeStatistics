@@ -141,7 +141,6 @@ public void *(android.view.View);
   public static * bind(android.view.View);
 }
 
-
 #保留R下面的资源
 -keep class **.R$ {*;}
 
@@ -189,6 +188,11 @@ public void *(android.view.View);
 #使用GSON、fastjson等框架时，所写的JSON对象类不混淆，否则无法将JSON解析成对应的对象
 -keepclassmembers class * {
     public <init>(org.json.JSONObject);
+}
+
+# Prevent R8 from leaving Data object members always null：防止R8让Data对象成员始终为空
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
 }
 
 -dontwarn android.net.**

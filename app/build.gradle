@@ -28,20 +28,21 @@ android {
     buildTypes {
         release {
             //启用支持代码收缩、混淆和优化
-            minifyEnabled true
+            minifyEnabled false
             //启用资源收缩,移除多余资源
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
+        //开启混淆后，打包替代原版本出现数据异常。（得删除了数据再重新打开才正常）所以暂时去掉，因为旧数据不能丢失。
         debug {
             //将debug版本的包名设置为<app package>.debug以便能够同时在一台设备上安装debug和release版本的apk
 //            applicationIdSuffix ".debug"
 //            manifestPlaceholders = [ISDEBUG: "true"]
             //启用支持代码收缩、混淆和优化
-            minifyEnabled true
+            minifyEnabled false
             //启用资源收缩,移除多余资源
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
