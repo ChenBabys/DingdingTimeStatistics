@@ -71,7 +71,7 @@ public *;
 #这个过滤器是谷歌推荐的算法，一般不做更改
 -optimizations !code/simplification/cast,!field/,!class/merging/
 
-#保留我们使用的四大组件，自定义的Application等等这些类不被混淆
+##保留我们使用的四大组件，自定义的Application等等这些类不被混淆
 #因为这些子类都有可能被外部调用
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -83,7 +83,7 @@ public *;
 -keep public class * extends android.view.View
 -keep public class *.ILicensingService
 -keep class androidx.core.app.CoreComponentFactory { *; }
-
+#
 #AndroidX混淆
 -keep class com.google.android.material.** {*;}
 -keep class androidx.** {*;}
@@ -117,6 +117,30 @@ public *;
 -keepclassmembers class * extends android.app.Activity{
 public void *(android.view.View);
 }
+
+# 保留反射中用到的类和方法，到时根据具体情况再改
+# 反编译测试的时候有效，运行时也与未混淆情况一样（这个混淆范围太大，可以不要）
+#-keepclassmembers class com.chenbabys.dingdingtimestatistics.** {
+#
+#   public *;
+#
+#   protected *;
+#
+#   private *;
+#
+#}
+#避免混淆binding相关的内容（dataBinding和ViewBinding）（这种方式范围也大了，用下面的好点）
+#-keep class **.*Binding {*;}
+#-keep class **.*BindingImpl {*;}
+
+# 防止viewbinding反射方法被混淆（这个就是本次混淆的主要关键代码，没有这段就会闪退，因为用到了viewBinding，没哟这段会导致LayoutInflater找不到）
+#其他的混淆只是锦上添花，其他全都都是有没有都可以。目前为止（2021.10.18）
+-keepclassmembers class * implements androidx.viewbinding.ViewBinding {
+  public static * inflate(android.view.LayoutInflater);
+  public static * inflate(android.view.LayoutInflater, android.view.ViewGroup, boolean);
+  public static * bind(android.view.View);
+}
+
 
 #保留R下面的资源
 -keep class **.R$ {*;}
@@ -159,7 +183,7 @@ public void *(android.view.View);
     public static final android.os.Parcelable$Creator *;
  }
 
-#==================gson && protobuf==========================
+##==================gson && protobuf==========================
 -dontwarn com.google.**
 -keep class com.google.gson.** {*;}
 #使用GSON、fastjson等框架时，所写的JSON对象类不混淆，否则无法将JSON解析成对应的对象
@@ -170,10 +194,8 @@ public void *(android.view.View);
 -dontwarn android.net.**
 -keep class android.net.SSLCertificateSocketFactory{*;}
 
-
--keep public abstract class android.view.LayoutInflater{*;}
-
-#---------------------------------开源项目以及第三方SDK---------------------------------
+#
+##---------------------------------开源项目以及第三方SDK---------------------------------
 # okhttp
 
 -dontwarn com.squareup.okhttp3.**
