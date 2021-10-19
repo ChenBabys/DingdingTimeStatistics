@@ -7,6 +7,7 @@ import java.util.*
 
 /**
  * 增加SerializedName序列化。避免混淆后Gson解析不到，造成空数据。
+ * 但是这种解决办法有局限性，实体类多了就难以全部都序列化，特别是多人开发的项目。就很难统一。寻找其他办法解决更好。
  */
 data class DateEntity(
     @SerializedName("date") var date: Date? = null,//具体日期
