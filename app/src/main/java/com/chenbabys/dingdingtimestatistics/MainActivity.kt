@@ -180,8 +180,8 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                             }
                             1 -> {
                                 val content = if (item.isRestWorking) {
-                                    "取消标记休息日加班，取消后不再计入加班时长"
-                                } else "标记该天为休息日加班，标记后算入加班时长"
+                                    "取消标记休息日加班，取消后正常时间段（09:00--18:00）不再计入加班时长"
+                                } else "标记该天为休息日加班，标记后当天全部工时算入加班时长"
                                 DialogUtils.showTureDialog(this ,content, onConfirm = {
                                     item.isRestWorking = !item.isRestWorking
                                     if (item.vacation != null && item.vacation != CacheUtil.defaultFloat) {
