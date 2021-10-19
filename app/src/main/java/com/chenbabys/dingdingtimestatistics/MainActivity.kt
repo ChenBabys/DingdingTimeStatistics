@@ -179,7 +179,10 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                                 })
                             }
                             1 -> {
-                                Handler(mainLooper).postDelayed({//延时，避免弹框很突兀。
+                                val content = if (item.isRestWorking) {
+                                    "取消标记休息日加班，取消后不再计入加班时长"
+                                } else "标记该天为休息日加班，标记后算入加班时长"
+                                DialogUtils.showTureDialog(this ,content, onConfirm = {
                                     item.isRestWorking = !item.isRestWorking
                                     if (item.vacation != null && item.vacation != CacheUtil.defaultFloat) {
                                         //如果头上的代码设置成了当前是休息日则清零请假时间。
@@ -188,7 +191,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                                         }
                                     }
                                     viewModel.dateListChange.value = true
-                                }, 300)
+                                })
                             }
                         }
                     }, -32f, -15f
@@ -210,8 +213,10 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                     //这种方式是最准确的，并且微信的根据字母跳转也是用这种方式
                     //第一个参数是跳转到指定下标，第二个是偏移多少像素
                     (binding.rvContent.layoutManager as LinearLayoutManager)
-                        .scrollToPositionWithOffset(pos,
-                            (ScreenUtils.getScreenHeight() * 0.4).toInt())
+                        .scrollToPositionWithOffset(
+                            pos,
+                            (ScreenUtils.getScreenHeight() * 0.4).toInt()
+                        )
                 }
             }
         }

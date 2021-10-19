@@ -33,7 +33,7 @@
         android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/purple_500"
+        android:background="@color/gray_lite"
         app:layout_constraintTop_toBottomOf="@id/rv_content" />
 
 

@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chenbabys.dingdingtimestatistics.R
+import com.chenbabys.dingdingtimestatistics.databinding.DialogTrueShowBinding
 import com.chenbabys.dingdingtimestatistics.databinding.DialogValueTipsChildBinding
 import com.chenbabys.dingdingtimestatistics.databinding.DialogViewSettingWeekSingleOrDoubleRestBinding
 import per.goweii.anylayer.ActivityHolder
@@ -45,8 +46,7 @@ object DialogUtils {
         listener: DialogInterface.OnClickListener?
     ): DialogLayer {
         val contentView = LayoutInflater.from(ActivityHolder.requireCurrentActivity()).inflate(
-            R.layout.dialog_confirm,
-            null
+            R.layout.dialog_confirm, null
         )
         val dialog = AnyLayer.dialog()
             .contentView(contentView)
@@ -86,7 +86,7 @@ object DialogUtils {
     fun showMoreChooseDialog(
         tabValues: MutableList<String>,
         view: View,
-        listener: (position:Int, text: String) -> Unit,
+        listener: (position: Int, text: String) -> Unit,
         offsetXdp: Float = -5f,//预设默认x偏移值
         offsetYdp: Float = -10f//预设默认y偏移值
     ): DialogLayer {
@@ -117,13 +117,13 @@ object DialogUtils {
             .cancelableOnTouchOutside(true)
             .cancelableOnClickKeyBack(true)
         container.removeAllViews()//清除所有view
-        for (index in 0 until tabValues.size){
+        for (index in 0 until tabValues.size) {
             val childView =
                 DialogValueTipsChildBinding.inflate(LayoutInflater.from(ActivityHolder.getCurrentActivity()))
             childView.content.text = tabValues[index]
             container.addView(childView.root)
             childView.root.setOnClickListener {
-                listener.invoke(index,childView.content.text.toString())
+                listener.invoke(index, childView.content.text.toString())
                 dialogLayer.dismiss()
             }
         }
@@ -192,6 +192,43 @@ object DialogUtils {
         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
         layoutParams.width = ScreenUtils.getScreenWidth()
         return dialog
+    }
+
+    /**
+     * 显示确认的弹框
+     */
+    fun showTureDialog(context: Context, content: String, onConfirm: () -> Unit) {
+        val binding = DialogTrueShowBinding.inflate(LayoutInflater.from(context))
+        binding.tvContent.text = content
+        val dialog =
+            AnyLayer.dialog(context).contentView(binding.root)
+                .backgroundDimDefault()
+                .compatSoftInput(true)//适应输入弹框上移
+                .gravity(Gravity.CENTER)
+                .contentAnimator(object : Layer.AnimatorCreator {
+                    override fun createInAnimator(target: View): Animator {
+                        return AnimatorHelper.createAlphaInAnim(binding.root)
+                    }
+
+                    override fun createOutAnimator(target: View): Animator {
+                        return AnimatorHelper.createAlphaOutAnim(binding.root)
+                    }
+
+                }).cancelableOnTouchOutside(true)
+                .cancelableOnClickKeyBack(true)
+        dialog.show()
+        //点击事件
+        binding.tvConfirm.setOnClickListener {
+            dialog.dismiss()
+            onConfirm.invoke()
+        }
+        binding.flDelete.setOnClickListener{
+            dialog.dismiss()
+        }
+        //不加这段布局就扭曲~
+        val layoutParams = dialog.contentView!!.layoutParams
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
     }
 
 
