@@ -1,27 +1,31 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
+import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * 增加SerializedName序列化。避免混淆后Gson解析不到，造成空数据。
+ */
 data class DateEntity(
-    var date: Date? = null,//具体日期
-    var day: Int? = null,//一个月的某天
-    var month: Int? = null,//月份
-    var dayOfWeek: Int? = null,//星期几
+    @SerializedName("date") var date: Date? = null,//具体日期
+    @SerializedName("day") var day: Int? = null,//一个月的某天
+    @SerializedName("month") var month: Int? = null,//月份
+    @SerializedName("dayOfWeek") var dayOfWeek: Int? = null,//星期几
     //判断了时间和date字段相比较后，如果是今天把这个填充为时间上的今天的list数据下标
-    var isTodayPosition: Int? = null,
-    var vacation: Float? = null,//请假的时间
-    var isRestWorking: Boolean = false,//是否是休息日加班
-    var isWeeHours: Boolean = false,//是否是凌晨
-    var dayWorkHour: Float? = null,//当天总工时
+    @SerializedName("isTodayPosition") var isTodayPosition: Int? = null,
+    @SerializedName("vacation") var vacation: Float? = null,//请假的时间
+    @SerializedName("isRestWorking") var isRestWorking: Boolean = false,//是否是休息日加班
+    @SerializedName("isWeeHours") var isWeeHours: Boolean = false,//是否是凌晨
+    @SerializedName("dayWorkHour") var dayWorkHour: Float? = null,//当天总工时
 
     //在适配器中需要使用的字段
-    var startTime: String? = null,//上班时间
-    var endTime: String? = null,//下班时间
+    @SerializedName("startTime") var startTime: String? = null,//上班时间
+    @SerializedName("endTime") var endTime: String? = null,//下班时间
 
     //每周的休息方式，1单休，2双休
-    var weekRestType: Int? = null
+    @SerializedName("weekRestType") var weekRestType: Int? = null
 ) {
 
     /**

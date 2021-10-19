@@ -1,8 +1,10 @@
 package com.chenbabys.dingdingtimestatistics.ui.main
 
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.chenbabys.dingdingtimestatistics.base.BaseViewModel
+import com.chenbabys.dingdingtimestatistics.http.LogUtil
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import java.util.*
@@ -24,6 +26,7 @@ class MainVM : BaseViewModel() {
      */
     fun getCalendarEntities() {
         val thisMonth = CalenderUtil.getThisMonth()//当前月
+        //LogUtils.d(GsonUtils.toJson(CacheUtil.getDdtsCache(thisMonth)))
         dateList = if (thisMonth != CacheUtil.getMonth()) {//如果月份不同了就更新
             CacheUtil.setMonth(thisMonth)//同步当前月
             //清除掉上上上个月的旧数据，只保留三个月（当前月和上月以及上上月）

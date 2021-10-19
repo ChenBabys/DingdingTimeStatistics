@@ -28,9 +28,9 @@ android {
     buildTypes {
         release {
             //启用支持代码收缩、混淆和优化
-            minifyEnabled false
+            minifyEnabled true
             //启用资源收缩,移除多余资源
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -40,9 +40,9 @@ android {
 //            applicationIdSuffix ".debug"
 //            manifestPlaceholders = [ISDEBUG: "true"]
             //启用支持代码收缩、混淆和优化
-            minifyEnabled false
+            minifyEnabled true
             //启用资源收缩,移除多余资源
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }

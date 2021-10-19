@@ -3,8 +3,8 @@ package com.chenbabys.dingdingtimestatistics.http
 import android.util.Log
 
 object LogUtil {
-    private const val TAG = "ctms_log"
-    private const val TAG_NET = "ctms_net"
+    private const val TAG = "ddts_log"
+    private const val TAG_NET = "ddts_net"
 
     fun i(message: String?) {
          Log.i(TAG, message.toString())

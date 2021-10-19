@@ -176,6 +176,7 @@ public void *(android.view.View);
     java.lang.Object readResolve();
 }
 
+
 #保留Parcelable序列化类不被混淆
 -keepnames class * implements android.os.Parcelable
 -keep class * implements android.os.Parcelable {
@@ -190,7 +191,7 @@ public void *(android.view.View);
     public <init>(org.json.JSONObject);
 }
 
-# Prevent R8 from leaving Data object members always null：防止R8让Data对象成员始终为空
+# Prevent R8 from leaving Data object members always null：防止R8让Data对象成员始终为空(前提是实体data class中要添加SerializedName给每个字段),至关重要。
 -keepclassmembers,allowobfuscation class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
@@ -224,5 +225,34 @@ public void *(android.view.View);
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+
+#重复了
+###---------------Begin: proguard configuration for Gson  ----------
+## Gson uses generic type information stored in a class file when working with fields. Proguard
+## removes such information by default, so configure it to keep all of it.
+#-keepattributes Signature
+#
+## For using GSON @Expose annotation
+#-keepattributes *Annotation*
+#
+## Gson specific classes
+#-dontwarn sun.misc.**
+##-keep class com.google.gson.stream.** { *; }
+#
+## Application classes that will be serialized/deserialized over Gson
+#-keep class com.google.gson.examples.android.model.** { <fields>; }
+#
+## Prevent proguard from stripping interface information from TypeAdapterFactory,
+## JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+#-keep class * implements com.google.gson.TypeAdapterFactory
+#-keep class * implements com.google.gson.JsonSerializer
+#-keep class * implements com.google.gson.JsonDeserializer
+#
+## Prevent R8 from leaving Data object members always null
+#-keepclassmembers,allowobfuscation class * {
+#  @com.google.gson.annotations.SerializedName <fields>;
+#}
+#
+###---------------End: proguard configuration for Gson  ----------
 
 
