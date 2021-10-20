@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    android:duration="500">
+
+    <!--透明度-->
+    <alpha
+        android:fromAlpha="0"
+        android:toAlpha="1" />
+    <!--缩放值,pivot是枢纽的意思,从80%的时候开始执行动画到100%满屏-->
+    <scale
+        android:fromXScale="0.85"
+        android:fromYScale="0.85"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
+        android:toXScale="1"
+        android:toYScale="1" />
+</set>

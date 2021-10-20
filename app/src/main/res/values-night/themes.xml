@@ -17,8 +17,8 @@
     </style>
 
     <style name="spanTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="android:windowBackground">@mipmap/ic_launch</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@mipmap/ic_launch</item>
     </style>
 </resources>

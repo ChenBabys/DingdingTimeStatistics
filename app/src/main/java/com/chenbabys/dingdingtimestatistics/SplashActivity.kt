@@ -26,19 +26,27 @@ class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
 
     private fun initTime() {
         val timeStr = format.format(Date(System.currentTimeMillis()))
-            SpanUtils.with(binding.tvDate)
-                .append(timeStr)
-                .setFontSize(22,true)
-                .appendLine()
-                .append(CalenderUtil.getWeekCurrent())
-                .setFontSize(30,true)
-                .create()
+        SpanUtils.with(binding.tvDate)
+            .append(timeStr)
+            .setFontSize(22, true)
+            .appendLine()
+            .append(CalenderUtil.getWeekCurrent())
+            .setFontSize(30, true)
+            .create()
         //延时1s从新赋值后又开始延时，周而复始
         Handler(mainLooper).postDelayed({
             initTime()
-        },1000)
+        }, 1000)
     }
 
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(
+            R.anim.dialog_raise_center_in,
+            R.anim.dialog_raise_center_out
+        )
+    }
 
 
     override fun initVm() {
