@@ -1,4 +1,4 @@
-package com.chenbabys.dingdingtimestatistics.ui.main
+package com.chenbabys.dingdingtimestatistics.ui.model
 
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.google.gson.annotations.SerializedName

@@ -1,9 +1,8 @@
 package com.chenbabys.dingdingtimestatistics.util
 
-import android.annotation.SuppressLint
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.TimeUtils
-import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
+import com.chenbabys.dingdingtimestatistics.ui.model.DateEntity
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -128,4 +128,6 @@ dependencies {
     //implementation 'com.github.minminaya:GenaralRoundLayout:1.0.0'
     ///用于对蒲公英使用统计和更新检查以及异常上报的
     implementation 'com.pgyer:analytics:4.2.0'
+    //钉钉安卓授权sdk
+    implementation 'com.alibaba.android:ddsharesdk:1.1.0'
 }

@@ -1,20 +1,17 @@
-package com.chenbabys.dingdingtimestatistics.ui.main
+package com.chenbabys.dingdingtimestatistics.ui
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import com.blankj.utilcode.util.ClickUtils
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SpanUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chenbabys.dingdingtimestatistics.R
+import com.chenbabys.dingdingtimestatistics.ui.model.DateEntity
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils
 import com.chenbabys.dingdingtimestatistics.util.MethodUnit
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 /**
  * 日历打卡表适配器

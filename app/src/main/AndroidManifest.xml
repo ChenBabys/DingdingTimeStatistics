@@ -2,18 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chenbabys.dingdingtimestatistics">
-
-    <!-- 必选-->
+    <!-- 必选 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 获取网络状态 -->
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络通信-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- 获取设备信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取网络信息权限-->
-
-    <!-- 用户手机设置中允许未知来源安装包安装状态为关；-->
-    <!-- Android8.0 以后，如果要安装 apk 需要额外添加权限：-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络通信 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取设备信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取网络信息权限 -->
+    <!-- 用户手机设置中允许未知来源安装包安装状态为关； -->
+    <!-- Android8.0 以后，如果要安装 apk 需要额外添加权限： -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
@@ -25,43 +23,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DingdingTimeStatistics"
-        tools:targetApi="n"
-        tools:ignore="AllowBackup">
-<!--        //纵向定向portrait-->
+        tools:ignore="AllowBackup"
+        tools:targetApi="n">
+        <!-- //纵向定向portrait -->
         <activity
             android:name=".SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/spanTheme"
-            android:exported="true" >
+            android:theme="@style/spanTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-<!--        //纵向定向portrait-->
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait" >
-        </activity> <!-- 今日头条屏幕适配 -->
+        </activity> <!-- //纵向定向portrait -->
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ddshare.DDShareActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <!-- 今日头条屏幕适配 -->
         <meta-data
             android:name="design_width_in_dp"
             android:value="414" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="896" />
-
-        <!--蒲公英相关-->
+            android:value="896" /> <!-- 蒲公英相关 -->
         <meta-data
             android:name="PGYER_API_KEY"
-            android:value="5bc51128d2bd2774ae9585c5e46bc5e5"/>
+            android:value="5bc51128d2bd2774ae9585c5e46bc5e5" />
         <meta-data
             android:name="PGYER_FRONTJS_KEY"
-            android:value="9fe836218492b664de552aeb055e581e"/>
-
-        <!--添加新版本检测-->
+            android:value="9fe836218492b664de552aeb055e581e" /> <!-- 添加新版本检测 -->
         <meta-data
             android:name="PGYER_FEATURE_CHECK_UNPDATE"
-            android:value="true"/>
+            android:value="true" />
     </application>
 
 </manifest>

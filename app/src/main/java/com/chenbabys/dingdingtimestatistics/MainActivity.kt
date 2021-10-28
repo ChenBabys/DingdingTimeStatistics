@@ -14,9 +14,9 @@ import com.bigkoo.pickerview.view.TimePickerView
 import com.blankj.utilcode.util.*
 import com.chenbabys.dingdingtimestatistics.base.BaseActivity
 import com.chenbabys.dingdingtimestatistics.databinding.ActivityMainBinding
-import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
-import com.chenbabys.dingdingtimestatistics.ui.main.MainListAdapter
-import com.chenbabys.dingdingtimestatistics.ui.main.MainVM
+import com.chenbabys.dingdingtimestatistics.ui.model.DateEntity
+import com.chenbabys.dingdingtimestatistics.ui.MainListAdapter
+import com.chenbabys.dingdingtimestatistics.ui.viewmodel.MainVM
 import com.chenbabys.dingdingtimestatistics.util.CacheUtil
 import com.chenbabys.dingdingtimestatistics.util.CalenderUtil
 import com.chenbabys.dingdingtimestatistics.util.DialogUtils

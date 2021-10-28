@@ -2,7 +2,7 @@ package com.chenbabys.dingdingtimestatistics.util
 
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
-import com.chenbabys.dingdingtimestatistics.ui.main.DateEntity
+import com.chenbabys.dingdingtimestatistics.ui.model.DateEntity
 import com.tencent.mmkv.MMKV
 import java.lang.Exception
 
